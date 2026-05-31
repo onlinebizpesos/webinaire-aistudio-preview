@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ai-studio-experience — Preview</title>
+<style>
+/* === lp-systemio auto-fix : reset + anti-bandes Systeme.io === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { overflow-x: hidden !important; }
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body > div { background: transparent !important; }
+img { max-width: 100% !important; display: block; }
+
+/* Neutralise Systeme.io wrapper paddings/margins around the raw HTML block.
+   Systeme.io wraps the HTML in 11+ levels of <div>/<section> with IDs like
+   section-XXXX, row-XXXX, column-XXXX, rawhtml-XXXX. Each can add vertical
+   padding that produces visible "noir bands" above/below the LP content.
+   We target them all by ID prefix. */
+[id^="section-"],
+[id^="row-"],
+[id^="column-"],
+[id^="rawhtml-"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* === lp-systemio auto-fix : body background match LP === */
+body { background: #000 !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,800;1,800&family=Google+Sans:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  .ais-landing {
+    --bg: #000000;
+    --text: #ffffff;
+    --accent: #ff6500;      /* orange brand */
+    --ink: #0a0a0a;          /* texte sur fond orange */
+    --dark-orange: #7a2e00;  /* italique sur fond clair (rarely used) */
+    --muted: #ffffff;        /* WAS rgba .65 — passé en blanc plein (Loom #3 demande #4, #6) */
+    --line: rgba(255, 255, 255, 0.12);
+    --card: rgba(255, 255, 255, 0.04);
+    --radius: 18px;
+    --max: 1200px;
+  }
+
+  .ais-landing, .ais-landing * { box-sizing: border-box; }
+  .ais-landing {
+    /* !important required: lp-systemio anti-bandes rule `body > div { background: transparent !important; }` would otherwise reset our background via shorthand */
+    background-color: var(--bg) !important;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g stroke='%23FF6500' stroke-width='1' stroke-linecap='square' opacity='0.06'><line x1='40' y1='36' x2='40' y2='44'/><line x1='36' y1='40' x2='44' y2='40'/></g></svg>"),
+      url("./assets/backgrounds/bg-desktop-noir.webp") !important;
+    background-size: 80px 80px, cover !important;
+    background-position: 0 0, center !important;
+    background-repeat: repeat, no-repeat !important;
+    background-attachment: scroll, fixed !important;
+    color: var(--text);
+    font-family: 'Google Sans', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    position: relative;
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .ais-landing {
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g stroke='%23FF6500' stroke-width='1' stroke-linecap='square' opacity='0.06'><line x1='40' y1='36' x2='40' y2='44'/><line x1='36' y1='40' x2='44' y2='40'/></g></svg>"),
+        url("./assets/backgrounds/bg-mobile-noir.webp") !important;
+    }
+  }
+  .ais-landing * { margin: 0; padding: 0; }
+
+  /* ========== GLOBAL TYPOGRAPHY ========== */
+  .ais-landing h1, .ais-landing h2, .ais-landing h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .ais-landing h1 em, .ais-landing h2 em, .ais-landing h3 em {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    font-feature-settings: "kern";
+  }
+  .ais-landing h2 em {
+    -webkit-text-fill-color: var(--accent);
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+  }
+  .ais-landing h1 { font-size: clamp(1.8rem, 4vw, 3rem); }
+  .ais-landing h2 {
+    font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+    background: linear-gradient(135deg, #ffffff 0%, #ffd2b0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .ais-landing h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
+  .ais-landing p  { font-size: clamp(0.9rem, 1vw, 1rem); color: var(--muted); }
+
+  .ais-landing .accent { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+  /* ========== LAYOUT ========== */
+  .ais-landing .container {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .ais-landing section {
+    padding: 120px 0;
+    position: relative;
+  }
+
+  /* ========== CTA BUTTONS ========== */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 18px 32px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(255, 101, 0, 0.4);
+  }
+  .cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(255, 101, 0, 0.45);
+  }
+  .cta::after {
+    content: '→';
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  .cta:hover::after { transform: translateX(4px); }
+
+  /* ========== HERO ========== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 100px 0;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.72;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.5) 85%),
+      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.75) 100%);
+    pointer-events: none;
+  }
+  .hero-accent-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255, 101, 0, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255, 101, 0, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 24px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    margin-bottom: 32px;
+  }
+  .eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #fff 60%, rgba(255,255,255,0.5) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero h1 .tm {
+    font-size: 0.4em;
+    vertical-align: super;
+    color: var(--accent);
+    -webkit-text-fill-color: var(--accent);
+  }
+  .hero .lead {
+    font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+    color: var(--text);
+    max-width: 900px;
+    margin: 16px auto 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .hero .sub-lead {
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 56px;
+    font-weight: 500;
+  }
+  .hero-content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .hero h1 {
+    line-height: 1;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  /* ========== SECTION HEADERS ========== */
+  /* Badge orange rempli — eyebrow for section tags. Loom #3 image #7 demande:
+     "pastille orange comme t'as fait là en haut, écriture blanche dedans".
+     Note: déroge à la règle brandbook "texte sur orange = Ink only" — client a explicitement demandé blanc. */
+  .section-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  /* ========== SECTION 2 : DESCRIPTION (2 COLS) ========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .two-col .text-block h2 { margin-bottom: 28px; }
+  .two-col .text-block p { margin-bottom: 18px; }
+  .two-col .text-block p.highlight {
+    color: var(--text);
+    font-weight: 500;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin: 24px 0;
+  }
+  .image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(255,101,0,0.1), rgba(0,0,0,0.6)),
+      radial-gradient(circle at 30% 30%, rgba(255,101,0,0.15), transparent 50%),
+      #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .image-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px dashed rgba(255,255,255,0.1);
+    border-radius: calc(var(--radius) - 8px);
+  }
+
+  /* ========== SECTION 2 : DESCRIPTION CENTERED ========== */
+  .description-centered {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .description-centered h2 { margin-bottom: 36px; }
+  .description-centered p { margin-bottom: 20px; }
+  .description-centered .highlight {
+    color: var(--text);
+    font-weight: 500;
+    border-left: none;
+    padding: 24px 0;
+    margin: 32px auto;
+    max-width: 720px;
+    position: relative;
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+  }
+  .description-centered .highlight::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: var(--accent);
+    margin: 0 auto 16px auto;
+  }
+  .description-centered__separator {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: var(--accent);
+    margin: 36px auto 39px auto;
+  }
+
+  /* ========== SECTION 2 : RENDUS GALLERY ========== */
+  .rendus-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 48px auto 0;
+    padding: 0 24px;
+  }
+  .rendus-gallery__item {
+    margin: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    text-align: left;
+  }
+  .rendus-gallery__item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 101, 0, 0.4);
+  }
+  .rendus-gallery__img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  .rendus-gallery__cap {
+    padding: 16px 18px;
+    text-align: center;
+    font-family: 'Google Sans', 'Google Sans Flex', sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-top: 1px solid var(--line);
+    line-height: 1.4;
+  }
+  @media (max-width: 900px) {
+    .rendus-gallery { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  @media (max-width: 560px) {
+    .rendus-gallery { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  /* ========== SECTION 3 : EXPERIENCE ========== */
+  .experience { text-align: center; }
+  .experience .container > * { margin-left: auto; margin-right: auto; }
+  .experience h2 { max-width: 900px; margin-bottom: 28px; }
+  .experience p  { max-width: 720px; margin-bottom: 18px; }
+  .experience .experience-image {
+    width: 100%;
+    max-width: 1100px;
+    margin: 56px auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: #0a0a0a;
+    line-height: 0;
+  }
+  .experience .experience-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ========== SECTION 4 : PHASES ========== */
+  .phases { text-align: center; }
+  .phases h2 { max-width: 900px; margin: 0 auto 80px; }
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 64px;
+  }
+  .phase-card {
+    text-align: center;
+    padding: 40px 24px;
+    border: 1px solid rgba(255, 101, 0, 0.3);
+    border-radius: var(--radius);
+    background:
+      radial-gradient(circle at top, rgba(255,101,0,0.12), transparent 70%),
+      #0a0a0a;
+    transition: transform 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+  }
+  /* CP6 : phase-marker (discreet 01/02/03) + phase-title (explicit) */
+  .phase-marker {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(255, 101, 0, 0.5);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .phase-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .phase-title em {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    color: var(--accent);
+  }
+  .phase-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 101, 0, 0.08);
+    border: 1px solid rgba(255, 101, 0, 0.3);
+  }
+  .phase-icon svg { width: 40px; height: 40px; }
+  .phase-number {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .phase-card p { color: var(--text); font-weight: 500; }
+
+  /* ========== SECTION 5 : BONUS ========== */
+  .bonus { text-align: center; }
+  .bonus-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 101, 0, 0.3);
+    background:
+      radial-gradient(circle at top, rgba(255,101,0,0.12), transparent 70%),
+      #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+  .bonus-wrap::before {
+    content: 'BONUS EXCLUSIF';
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  .bonus h2 { margin: 32px 0 28px; }
+  .bonus-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 520px;
+    height: auto;
+    margin: 0 auto 32px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: #050505;
+    overflow: hidden;
+  }
+  .bonus-video-wrap {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+  .bonus-video-wrap .bonus-image { margin: 0 auto 32px; }
+  .bonus-ribbon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 5;
+    background: var(--accent);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(255, 101, 0, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    animation: bonus-ribbon-bob 2.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .bonus-ribbon::after {
+    content: '\2192';
+    font-size: 0.8rem;
+  }
+  @keyframes bonus-ribbon-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @media (max-width: 560px) {
+    .bonus-ribbon {
+      top: 12px;
+      right: 12px;
+      font-size: 0.55rem;
+      padding: 8px 12px;
+    }
+  }
+  .bonus-includes {
+    text-align: left;
+    margin: 28px auto 40px;
+    max-width: 560px;
+  }
+  .bonus-includes .label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .bonus-includes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .bonus-includes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    font-weight: 500;
+  }
+  .bonus-includes li svg.bonus-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .bonus-includes li .wa-highlight {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  /* ========== SECTION 6 : PRESENTATION ========== */
+  /* CP8 desktop : image à droite (Loom #3 image #10 "collé à droite") */
+  .presentation .text-block { order: 1; }
+  .presentation .image-col { order: 2; }
+  .presentation p + p { margin-top: 16px; }
+  .presentation .presentation-image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(255,101,0,0.1), rgba(0,0,0,0.6)),
+      radial-gradient(circle at 30% 30%, rgba(255,101,0,0.15), transparent 50%),
+      #0a0a0a;
+    position: relative;
+  }
+  .presentation .presentation-image::before {
+    content: 'Photo · Nico IRL';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .presentation .presentation-image img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ========== SECTION 7 : TESTIMONIALS ========== */
+  .testimonials {
+    text-align: center;
+  }
+  .testimonials h2 {
+    margin-bottom: 64px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .testi-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: left;
+  }
+  .testi-card__quote {
+    color: #ffffff;
+    font-family: 'Google Sans', 'Google Sans Flex', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .testi-card__role {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .testi-card__name {
+    font-family: 'Google Sans', 'Google Sans Flex', sans-serif;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #ffffff;
+    margin: 0;
+  }
+  @media (max-width: 700px) {
+    .testi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ========== FOOTER ========== */
+  .ais-landing footer {
+    padding: 60px 0 40px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .ais-landing footer .logo {
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ========== REVEAL ANIMATIONS ========== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    section { padding: 80px 0; }
+    .two-col { grid-template-columns: 1fr; gap: 40px; }
+    .presentation .text-block { order: 2; }
+    .presentation .image-col { order: 1; }
+    .phases-grid { grid-template-columns: 1fr; }
+    .bonus-wrap { padding: 60px 24px; }
+  }
+
+  /* iPhone SE / mobile : fit hero above-the-fold (375x667) */
+  @media (max-width: 600px) {
+    .hero { padding: 32px 0 40px; min-height: auto; }
+    .hero-content { padding-top: 16px; padding-bottom: 16px; }
+    .eyebrow { margin-bottom: 14px; font-size: 0.72rem; padding: 8px 16px; }
+    .hero h1 { font-size: 2rem; margin-bottom: 4px; }
+    .hero .lead { font-size: 1.35rem; margin: 8px auto 14px; line-height: 1.2; }
+    .hero .sub-lead { font-size: 0.9rem; margin-bottom: 22px; }
+  }
+</style>
+<style>
+/* === lp-systemio auto-fix : full-bleed escape for single root wrapper .ais-landing === */
+.ais-landing {
+  position: relative !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+}
+</style>
+<style>
+/* === lp-systemio auto-fix : anti force-dark MIUI on gradient-clip titles === */
+h1, h2, h3 {
+  color: #ffffff;
+  forced-color-adjust: none;
+}
+</style>
+<style>
+/* ========== TOP BAR GLOBALE (sticky) — refonte verbatim Loom #3 (0:10-0:33)
+   "petite bande en haut, simple, pas de défilement, avec nom événement
+   + temps restant avant fermeture inscriptions + nombre de personnes inscrites" ========== */
+.ais-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 101, 0, 0.3);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.ais-topbar__event {
+  color: #ffffff;
+}
+.ais-topbar__sep {
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+.ais-topbar__countdown {
+  color: #ff6500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.ais-topbar__countdown::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #ff6500;
+  border-radius: 50%;
+  box-shadow: 0 0 14px #ff6500;
+  animation: ais-topbar-pulse 1.6s infinite;
+}
+.ais-topbar__countdown .num {
+  font-variant-numeric: tabular-nums;
+  color: #ffffff;
+  letter-spacing: 0;
+  margin-left: 8px;
+}
+.ais-topbar__countdown .num:first-of-type { margin-left: 6px; }
+@keyframes ais-topbar-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+@media (max-width: 768px) {
+  .ais-topbar {
+    gap: 14px;
+    padding: 12px 14px;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    flex-wrap: wrap;
+  }
+  .ais-topbar__sep { display: none; }
+}
+</style>
+<style>
+/* ========== HERO LOGO + ITALIC LEAD + FOMO BLOCK — CP4 (Loom #3 images #1, #2, #3, #11) ========== */
+.hero-logo {
+  display: block;
+  max-width: 340px !important;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 24px;
+}
+@media (max-width: 768px) {
+  .hero-logo { max-width: 260px !important; }
+}
+
+.hero .lead em {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  color: #ff6500;
+  font-feature-settings: "kern";
+  letter-spacing: -0.02em;
+}
+
+</style>
+</head>
+<body>
+<!-- AI Studio Experience — fragment HTML pour bloc Systeme.io -->
+
+<div class="ais-topbar">
+  <span class="ais-topbar__event">Dim. 28 juin &middot; 20h</span>
+  <span class="ais-topbar__sep" aria-hidden="true"></span>
+  <span class="ais-topbar__countdown">Inscriptions ferment dans<span class="num" id="ais-cd-d">--j</span><span class="num" id="ais-cd-h">--h</span><span class="num" id="ais-cd-m">--m</span><span class="num" id="ais-cd-s">--s</span></span>
+</div>
+<script>
+(function() {
+  // Cible : 28 juin 2026 à 20:00 heure de Paris.
+  // Si la date est dans le futur → countdown réel. Si dépassée → afficher "C'EST MAINTENANT".
+  var target = new Date('2026-06-28T20:00:00+02:00').getTime();
+  var d = document.getElementById('ais-cd-d');
+  var h = document.getElementById('ais-cd-h');
+  var m = document.getElementById('ais-cd-m');
+  var s = document.getElementById('ais-cd-s');
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      var bar = document.querySelector('.ais-topbar__countdown');
+      if (bar) bar.textContent = "C'est maintenant — rejoignez le live";
+      return;
+    }
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins = Math.floor((diff % 3600000) / 60000);
+    var secs = Math.floor((diff % 60000) / 1000);
+    if (d) d.textContent = days + 'j';
+    if (h) h.textContent = hours + 'h';
+    if (m) m.textContent = mins + 'm';
+    if (s) s.textContent = secs + 's';
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+<div class="ais-landing">
+
+<!-- ========== 1. HERO ========== -->
+<section class="hero">
+  <div class="hero-bg">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a194734914361.56550386_VIDEO-HERO.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-accent-glow"></div>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content reveal">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      <span>Atelier live — Dim. 28 juin · 20h</span>
+    </div>
+    <img src="./assets/logos/ai-studio-experience-logo-white.png" alt="AI Studio Experience™" class="hero-logo" />
+    <p class="lead">2 heures pour comprendre comment <em>lancer votre Studio IA</em> et dépasser les 10 000€ par mois en tant que créatif freelance.</p>
+    <p class="sub-lead">Découvrez le nouveau modèle recherché par les entreprises.</p>
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je réserve ma place gratuite</a>
+  </div>
+</section>
+
+<!-- ========== 2. DESCRIPTION ========== -->
+<section class="description">
+  <div class="container">
+    <div class="description-centered reveal">
+      <span class="section-tag">Le contexte</span>
+      <h2>Et si il existait un <em>nouveau modèle</em> qui permettait aux créatifs solos de concurrencer les agences de production à gros budget&nbsp;?</h2>
+      <p>L'IA est en train de révolutionner notre manière de consommer mais surtout, notre manière de travailler.</p>
+      <p>Et pendant que certains freelance crient au scandale, un petit groupe de créatif a compris que l'IA n'allait pas tuer leur métier mais le révolutionner.</p>
+      <p class="highlight">Produire en 4 heures une campagne créative à 1000€ qui prend normalement 3 semaines, c'est aujourd'hui possible.</p>
+      <div class="rendus-gallery">
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946bbc87313.11045160_GEN.CLIENT-FEMMEPISCINE.jpeg" alt="Campagne IA créée par Jacky" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Jacky — ancienne DA reconvertie en Studio IA créatif solo</figcaption>
+        </figure>
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946c0b1d740.98491655_GEN.CLIENT-GLACE.jpeg" alt="Campagne IA créée par Anaïs" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Anaïs — ancienne vidéaste reconvertie en Studio IA créatif solo</figcaption>
+        </figure>
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946c50f0e62.71480059_GEN.CLIENT-P%C3%8ACHE.jpeg" alt="Campagne IA créée par Thilo" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Thilo — ancien monteur vidéo reconverti en Studio IA créatif solo</figcaption>
+        </figure>
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946c9ee7e12.72135836_GEN.CLIENT-SKI.jpeg" alt="Campagne IA créée par Théo" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Théo — ancien monteur vidéo reconverti en Studio IA créatif solo</figcaption>
+        </figure>
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946b5d4e6b5.75222704_GEN.CLIENT-FEMMEBALLON.jpeg" alt="Campagne IA créée par Pauline" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Pauline — ancienne créatrice UGC reconvertie en Studio IA créatif solo</figcaption>
+        </figure>
+        <figure class="rendus-gallery__item">
+          <img class="rendus-gallery__img" src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946a23c70d3.73441595_GEN.CLIENT-BOX.jpeg" alt="Campagne IA créée par Fabien" loading="lazy">
+          <figcaption class="rendus-gallery__cap">Créé par Fabien — ancien vidéaste reconverti en Studio IA créatif solo</figcaption>
+        </figure>
+      </div>
+      <span class="description-centered__separator" aria-hidden="true"></span>
+      <p>Dans ce live, vous allez découvrir comment l'intelligence artificielle peut devenir un avantage concurrentiel et vous faire atteindre la barre des 5 chiffres par mois grâce au nouveau modèle de Studio IA créatif solo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. EXPERIENCE ========== -->
+<section class="experience">
+  <div class="container reveal">
+    <span class="section-tag">L'expérience</span>
+    <h2>AI Studio Experience<span class="accent">™</span> : apprenez en live comment <em>créer votre première campagne créative</em> à 1000€ en moins de 2 heures.</h2>
+    <p>Pendant ce live on va réaliser sous vos yeux et ensemble les workflow pour passer d'une page blanche à une campagne créative à 4 chiffres.</p>
+    <p>À la fin de cette expérience, vous saurez quel outil utiliser dans quel contexte et comment construire un workflow IA pour un rendu hyper réaliste.</p>
+    <div class="experience-image">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946d85568c3.93265909_PHOTO-SECTIONEXPERIENCE.png" alt="AI Studio Experience" />
+    </div>
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je veux assister à l'AI Studio Experience gratuitement</a>
+  </div>
+</section>
+
+<!-- ========== 4. PHASES ========== -->
+<section class="phases">
+  <div class="container">
+    <span class="section-tag reveal">Le programme</span>
+    <h2 class="reveal">Les <em>3 phases</em> de l'événement <br/>AI Studio Experience<span class="accent">™</span></h2>
+
+    <div class="phases-grid">
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Vague / écraser le marché (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="#ff6500" stroke-width="2.5" stroke-linecap="round">
+              <animate attributeName="d"
+                values="M8 40 Q20 24 32 40 T56 40;
+                        M8 40 Q20 48 32 40 T56 40;
+                        M8 40 Q20 24 32 40 T56 40"
+                dur="3s" repeatCount="indefinite"/>
+            </path>
+            <path stroke="#ff6500" stroke-width="2.5" stroke-linecap="round" opacity="0.5">
+              <animate attributeName="d"
+                values="M8 48 Q20 32 32 48 T56 48;
+                        M8 48 Q20 56 32 48 T56 48;
+                        M8 48 Q20 32 32 48 T56 48"
+                dur="3s" begin="0.4s" repeatCount="indefinite"/>
+            </path>
+            <g transform="translate(48 20)">
+              <circle r="6" stroke="#ff6500" stroke-width="2.5"/>
+              <path d="M0 -6 L0 6 M-6 0 L6 0" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round"/>
+              <animateTransform attributeName="transform" type="translate" values="48 20;48 16;48 20" dur="2s" repeatCount="indefinite"/>
+            </g>
+          </svg>
+        </div>
+        <span class="phase-marker">01</span>
+        <h3 class="phase-title"><em>L'avantage hybride</em></h3>
+        <p>La vraie raison pour laquelle les créatifs hybrides vont écraser le marché d'ici les 12 prochains mois.</p>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Canal caché / radar (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="32" cy="32" r="4" fill="#ff6500">
+              <animate attributeName="r" values="3;5;3" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+            <path d="M32 12 L32 4 M32 60 L32 52 M12 32 L4 32 M60 32 L52 32" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+            <g style="transform-origin: 32px 32px;">
+              <circle cx="32" cy="14" r="2" fill="#ff6500">
+                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="3s" repeatCount="indefinite"/>
+            </g>
+          </svg>
+        </div>
+        <span class="phase-marker">02</span>
+        <h3 class="phase-title">Trouver ses <em>missions</em></h3>
+        <p>Le canal contre-intuitif où trouver des missions créatives à 5 chiffres sans prospecter ni présence sur les réseaux sociaux.</p>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Lecture / Live démo (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="14" width="44" height="32" rx="3" stroke="#ff6500" stroke-width="2.5"/>
+            <circle cx="48" cy="20" r="2" fill="#ff6500">
+              <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+              <animate attributeName="r" values="2;2.6;2" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <path d="M28 24 L40 30 L28 36 Z" fill="#ff6500">
+              <animateTransform attributeName="transform" type="scale" values="1;1.15;1" dur="1.6s" repeatCount="indefinite" additive="sum"/>
+              <animate attributeName="opacity" values="0.7;1;0.7" dur="1.6s" repeatCount="indefinite"/>
+            </path>
+            <path d="M20 54 L44 54" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 46 L28 54 M36 46 L36 54" stroke="#ff6500" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+            <g stroke="#ff6500" stroke-width="1.5" stroke-linecap="round" fill="none">
+              <path d="M50 50 Q53 53 50 56" opacity="0">
+                <animate attributeName="opacity" values="0;1;0" dur="1.4s" repeatCount="indefinite"/>
+              </path>
+              <path d="M53 48 Q57 53 53 58" opacity="0">
+                <animate attributeName="opacity" values="0;1;0" dur="1.4s" begin="0.3s" repeatCount="indefinite"/>
+              </path>
+            </g>
+          </svg>
+        </div>
+        <span class="phase-marker">03</span>
+        <h3 class="phase-title"><em>Démonstration</em> live</h3>
+        <p>Démonstration live : création d'une campagne créative complète sous vos yeux.</p>
+      </div>
+    </div>
+
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta reveal">Je réserve ma place</a>
+  </div>
+</section>
+
+<!-- ========== 5. BONUS ========== -->
+<section class="bonus">
+  <div class="container">
+    <div class="bonus-wrap reveal">
+      <h2>Pour toutes les <em>personnes inscrites</em> à AI Studio Experience<span class="accent">™</span></h2>
+      <div class="bonus-video-wrap">
+        <span class="bonus-ribbon" aria-hidden="true">Regarde bien la vidéo</span>
+        <video
+          class="bonus-image"
+          src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1947496b2832.43842594_VIDEO-SECTIONBONUS.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto">
+        </video>
+      </div>
+      <h3>Votre Stack <em>AI Launch</em>.</h3>
+      <div class="bonus-includes">
+        <span class="label">Inclus</span>
+        <ul>
+          <li>
+            <svg class="bonus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>3 ressources complètes pour créer votre première micro campagne IA premium (même si vous êtes débutant total).</span>
+          </li>
+          <li>
+            <svg class="bonus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+            <span>Le workflow exact que j'ai utilisé pour créer une série de visuels facturée 1 400€ pour 4 heures de travail.</span>
+          </li>
+          <li>
+            <svg class="bonus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7.5" cy="15.5" r="5.5"/>
+              <path d="m21 2-9.6 9.6"/>
+              <path d="m15.5 7.5 3 3L22 7l-3-3"/>
+            </svg>
+            <span>Un accès anticipé à l'AI Studio Experience et au groupe <span class="wa-highlight">WhatsApp</span> communautaire.</span>
+          </li>
+        </ul>
+      </div>
+      <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je veux commencer l'expérience maintenant</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6. PRESENTATION ========== -->
+<section class="presentation">
+  <div class="container">
+    <div class="two-col">
+      <div class="image-col reveal">
+        <div class="presentation-image">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/885430/6a1946ce8459d6.60347967_PHOTO-NICOIRL.jpg" alt="Nicolas Slowdown" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <div class="text-block reveal">
+        <span class="section-tag">Live animé par Nicolas "Slowdown"</span>
+        <h2>Du "freelance remplaçable" au <em>directeur artistique demandé</em>.</h2>
+        <p>Il y a quelques années, j'étais comme vous : freelance à 60 heures par semaine bloqué à 3 000€ par mois.</p>
+        <p>Je courais après les contrats pour enchaîner des projets moyens.</p>
+        <p>Puis j'ai pris un virage que peu de créatifs ont pris en France : <strong style="color:var(--text)">la direction artistique appliquée à l'IA.</strong></p>
+        <p>J'ai fondé le premier Studio IA francophone qui produit l'impossible pour des marques premium.</p>
+        <p>Le modèle de studio IA à changé ma vie et m'a fait passer de "freelance remplaçable" à "directeur artistique demandé".</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 7. TESTIMONIALS ========== -->
+<section class="testimonials">
+  <div class="container reveal">
+    <span class="section-tag">Témoignage</span>
+    <h2>Ce qu'ils disent du <em>modèle Studio IA</em> créatif solo.</h2>
+  </div>
+
+  <div class="testi-grid reveal">
+    <div class="testi-card">
+      <p class="testi-card__quote">"Je viens de signer Arthur 1&nbsp;500€ pour 15 video ads, il a signé le devis hier."</p>
+      <div>
+        <p class="testi-card__role">Vidéaste freelance</p>
+        <p class="testi-card__name">Ismaël</p>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <p class="testi-card__quote">"Yes merci, j'ai pu upsell 1&nbsp;400€ fixe mensuel 🤝"</p>
+      <div>
+        <p class="testi-card__role">Freelance créative</p>
+        <p class="testi-card__name">Nastasia</p>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <p class="testi-card__quote">"Hello juste pour te tenir au jus, je signe un contrat en agence de publicité qui va me rajouter 2&nbsp;000€ de CA chaque mois en plus 🤩 très contente de ce nouveau step."</p>
+      <div>
+        <p class="testi-card__role">Directrice artistique</p>
+        <p class="testi-card__name">Mathilde</p>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <p class="testi-card__quote">"Là je viens de capter des trucs que tu m'as dit donc j'avance 1&nbsp;000 fois plus vite."</p>
+      <div>
+        <p class="testi-card__role">Monteur vidéo</p>
+        <p class="testi-card__name">Christophe</p>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <p class="testi-card__quote">"J'ai compris pourquoi je stagnais. Le shift mental + les outils m'ont fait passer un cap que je pensais inatteignable."</p>
+      <div>
+        <p class="testi-card__role">Filmmaker</p>
+        <p class="testi-card__name">Julien P.</p>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <p class="testi-card__quote">"En tant que graphiste je pensais que l'IA me tuerait. C'est l'inverse : elle multiplie ma valeur sur chaque projet."</p>
+      <div>
+        <p class="testi-card__role">Graphiste</p>
+        <p class="testi-card__name">Camille B.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="text-align:center; margin-top:64px;">
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je rejoins l'AI Studio Experience</a>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="logo">AI Studio Experience™</div>
+    <p>Atelier live — Dim. 28 juin 2026 · 20h · En ligne · Gratuit</p>
+    <p style="margin-top:12px;font-size:0.75rem;">© 2026 — Tous droits réservés</p>
+  </div>
+</footer>
+
+</div>
+<!-- /AI Studio Experience -->
+<script>
+(function(){
+  function __lpsysio_init() {
+
+  // Soft reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ===== Force-open Systeme.io popup on CTA click =====
+  
+
+  
+
+  
+
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __lpsysio_init);
+  } else {
+    __lpsysio_init();
+  }
+})();
+</script>
+
+<script>
+/* === lp-systemio auto-fix : CTA → Systeme.io native popup binding (V4) === */
+/* NOTE: Systeme.io does not expose a JS API to open popups, and HTML-only CTAs
+   aren't natively bound to popups. This handler reveals the popup wrapper by
+   setting display:flex + adding open-state classes, AND symmetric close handler
+   that removes them when X or backdrop is clicked. Without the symmetric close,
+   Systeme.io's React close fires but our inline display:flex overrides it →
+   popup stays visible (V4 fix). No CSS, no MutationObserver, no styling loop. */
+(function() {
+  var POPUP_IDS = ['popup-c859be5c'];
+  var OPEN_CLASSES = ['show', 'active', 'open', 'visible', 'in', 'is-open'];
+
+  function revealPopup(pid) {
+    var popup = document.getElementById(pid);
+    if (!popup) return false;
+    var w1 = popup.parentElement;
+    var w2 = w1 && w1.parentElement;
+    [w1, w2].forEach(function(w) {
+      if (!w || w.tagName === 'BODY') return;
+      w.style.display = 'flex';
+      OPEN_CLASSES.forEach(function(c) { w.classList.add(c); });
+      w.removeAttribute('aria-hidden');
+    });
+    return true;
+  }
+
+  function hidePopup(pid) {
+    var popup = document.getElementById(pid);
+    if (!popup) return false;
+    var w1 = popup.parentElement;
+    var w2 = w1 && w1.parentElement;
+    [w1, w2].forEach(function(w) {
+      if (!w || w.tagName === 'BODY') return;
+      w.style.display = '';
+      OPEN_CLASSES.forEach(function(c) { w.classList.remove(c); });
+    });
+    return true;
+  }
+
+  /* OPEN handler : click on [data-ais-popup="popup-XYZ"] reveals it. */
+  document.addEventListener('click', function(e) {
+    var trigger = e.target && e.target.closest && e.target.closest('[data-ais-popup]');
+    if (!trigger) return;
+    var pid = trigger.getAttribute('data-ais-popup');
+    if (!pid || POPUP_IDS.indexOf(pid) === -1) return;
+    e.preventDefault();
+    revealPopup(pid);
+  });
+
+  /* CLOSE handler (V4 symmetric) : close button or backdrop click hides. */
+  document.addEventListener('click', function(e) {
+    if (!e.target || !e.target.closest) return;
+    var clickedClose = !!e.target.closest('[data-testid="popup-close-icon"]');
+    var clickedBackdrop = false;
+    var backdropPid = null;
+    POPUP_IDS.forEach(function(pid) {
+      var popup = document.getElementById(pid);
+      if (!popup) return;
+      var w1 = popup.parentElement;
+      if (w1 && e.target === w1) { clickedBackdrop = true; backdropPid = pid; }
+    });
+    if (!clickedClose && !clickedBackdrop) return;
+    POPUP_IDS.forEach(function(pid) { hidePopup(pid); });
+  });
+
+  /* ESC key also closes (UX standard). */
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape' && e.keyCode !== 27) return;
+    POPUP_IDS.forEach(function(pid) { hidePopup(pid); });
+  });
+})();
+</script>
+
+<script>
+/* === lp-systemio auto-fix : MIUI video autoplay force === */
+(function() {
+  function tryPlay(v) {
+    var p = v.play();
+    if (p && p.catch) {
+      p.catch(function() {
+        var resume = function() {
+          v.play().catch(function() {});
+          document.removeEventListener('touchstart', resume);
+          document.removeEventListener('click', resume);
+        };
+        document.addEventListener('touchstart', resume, { once: true, passive: true });
+        document.addEventListener('click', resume, { once: true });
+      });
+    }
+  }
+  function go() {
+    document.querySelectorAll('video[autoplay]').forEach(tryPlay);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', go);
+  } else {
+    go();
+  }
+})();
+</script>
+</body>
+</html>

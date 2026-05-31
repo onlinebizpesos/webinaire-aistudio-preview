@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Studio Experience — Confirmation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,800;1,800&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  .ais-confirmation {
+    --bg: #000000;
+    --text: #ffffff;
+    --accent: #ff6500;
+    --accent-dark: #c14d00;
+    --accent-shade: #ffaa66;
+    --whatsapp: #25d366;
+    --whatsapp-hover: #1fae52;
+    --warn: #ff3b30;
+    --ink: #0a0a0a;
+    --muted: #ffffff;
+    --muted-soft: rgba(255, 255, 255, 0.7);
+    --line: rgba(255, 255, 255, 0.12);
+    --card-bg: #0a0a0a;
+    --card-border: rgba(255, 101, 0, 0.25);
+    --radius: 16px;
+    --radius-lg: 24px;
+    --max: 1200px;
+  }
+  .ais-confirmation, .ais-confirmation * { box-sizing: border-box; }
+
+  .ais-confirmation {
+    background-color: var(--bg) !important;
+    background-image: url("./assets/backgrounds/bg-desktop-noir.webp") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    color: var(--text);
+    font-family: 'Google Sans', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    position: relative;
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .ais-confirmation {
+      background-image: url("./assets/backgrounds/bg-mobile-noir.webp") !important;
+    }
+  }
+  .ais-confirmation * { margin: 0; padding: 0; }
+
+  /* Grid orange : vrai quadrillage à lignes fines + croix + à chaque intersection (image #4 user) */
+  .ais-confirmation::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><g stroke='%23FF6500' stroke-linecap='square' fill='none'><line x1='0' y1='32' x2='64' y2='32' stroke-width='0.5' opacity='0.18'/><line x1='32' y1='0' x2='32' y2='64' stroke-width='0.5' opacity='0.18'/><line x1='32' y1='28' x2='32' y2='36' stroke-width='1' opacity='0.35'/><line x1='28' y1='32' x2='36' y2='32' stroke-width='1' opacity='0.35'/></g></svg>");
+    background-size: 64px 64px;
+    background-repeat: repeat;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 0%, transparent 35%, black 90%);
+            mask-image: radial-gradient(ellipse at center, transparent 0%, transparent 35%, black 90%);
+    z-index: 0;
+  }
+  .ais-confirmation > * { position: relative; z-index: 1; }
+
+  /* ========== TYPOGRAPHY ========== */
+  .ais-confirmation h1, .ais-confirmation h2, .ais-confirmation h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .ais-confirmation h1 em, .ais-confirmation h2 em, .ais-confirmation h3 em {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: -0.015em;
+    font-feature-settings: "kern";
+  }
+  .ais-confirmation h2 em {
+    -webkit-text-fill-color: var(--accent);
+    background: none;
+    -webkit-background-clip: initial;
+            background-clip: initial;
+  }
+  .ais-confirmation h1 { font-size: clamp(1.55rem, 3.4vw, 2.4rem); }
+  .ais-confirmation h2 {
+    font-size: clamp(1.35rem, 2.7vw, 2.1rem);
+    background: linear-gradient(135deg, #ffffff 0%, #ffd2b0 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .ais-confirmation h3 { font-size: clamp(1.05rem, 1.6vw, 1.3rem); }
+  .ais-confirmation p {
+    font-size: clamp(0.92rem, 1.05vw, 1rem);
+    color: var(--muted-soft);
+    line-height: 1.65;
+  }
+  .ais-confirmation .accent { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+  /* ========== LAYOUT ========== */
+  .ais-confirmation .container {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .ais-confirmation section { position: relative; }
+
+  /* ========== TOP BAR PROGRESS (sticky) — vraie barre de chargement ~80% ========== */
+  .topbar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 16px 24px 14px;
+    background: rgba(0, 0, 0, 0.92);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 101, 0, 0.3);
+    display: flex;
+    justify-content: center;
+  }
+  .topbar-progress {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .topbar-progress-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .topbar-progress-fill {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #ff8533, #ff6500);
+    border-radius: 999px;
+    position: relative;
+    box-shadow: 0 0 12px rgba(255, 101, 0, 0.6);
+    animation: tpFill 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards 0.3s;
+  }
+  .topbar-progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    animation: tpShimmer 2.2s linear infinite 2s;
+  }
+  @keyframes tpFill {
+    from { width: 0; }
+    to { width: 80%; }
+  }
+  @keyframes tpShimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  @media (max-width: 600px) {
+    .topbar-wrap { padding: 12px 16px 10px; }
+    .topbar-progress-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+    }
+    .topbar-progress-bar { height: 6px; }
+  }
+
+  /* ========== URGENCE HERO ========== */
+  .urgence {
+    text-align: center;
+    padding: 56px 0 32px;
+  }
+  .urgence .warning {
+    color: #ff3b30;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: 1.18;
+    margin-bottom: 18px;
+    text-shadow: 0 0 18px rgba(255, 59, 48, 0.35);
+  }
+  .urgence .urgence-sub {
+    color: #ffffff;
+    max-width: 720px;
+    margin: 0 auto;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: clamp(0.92rem, 1.4vw, 1.1rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.45;
+  }
+  .urgence .urgence-sub em {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    color: var(--accent);
+    -webkit-text-fill-color: var(--accent);
+  }
+  @media (max-width: 600px) {
+    .urgence { padding: 20px 0 14px; }
+    .urgence .warning { margin-bottom: 10px; }
+  }
+
+  /* ========== VIDEO ========== */
+  .video-section {
+    padding: 24px 0 56px;
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    .video-section { padding: 8px 0 18px; }
+  }
+  /* (Banderole vidéo retirée — user feedback 01/06) */
+  .video-desktop {
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 101, 0, 0.25);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255, 101, 0, 0.08), transparent 70%),
+      #0a0a0a;
+    position: relative;
+  }
+  .video-mobile { display: none; }
+  @media (max-width: 600px) {
+    .video-desktop { display: none; }
+    .video-mobile {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 101, 0, 0.25);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 101, 0, 0.08), transparent 70%),
+        #0a0a0a;
+      position: relative;
+    }
+  }
+  .video-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; inset: 0;
+  }
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+  .play-icon {
+    width: 78px; height: 78px;
+    border-radius: 50%;
+    background: rgba(255, 101, 0, 0.18);
+    border: 1px solid rgba(255, 101, 0, 0.5);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .play-icon::before {
+    content: '';
+    width: 0; height: 0;
+    border-left: 20px solid var(--accent);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 5px;
+  }
+  .play-pulse {
+    position: absolute;
+    width: 78px; height: 78px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    animation: playPulse 2.5s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes playPulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(2.3); opacity: 0; }
+  }
+
+  /* ========== WHATSAPP INTRO ========== */
+  .whatsapp-intro {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+  @media (max-width: 600px) {
+    .whatsapp-intro { padding: 4px 0 8px; }
+    .whatsapp-intro h2 { margin-bottom: 14px; font-size: 1.1rem; }
+  }
+  .whatsapp-intro h2 {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    line-height: 1.25;
+  }
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--whatsapp);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    padding: 18px 36px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.32);
+    text-transform: uppercase;
+  }
+  .btn-whatsapp:hover {
+    background: var(--whatsapp-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(37, 211, 102, 0.45);
+  }
+  .btn-whatsapp svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .whatsapp-sub {
+    margin-top: 18px;
+    color: var(--muted-soft);
+    font-size: 0.92rem;
+  }
+  @media (max-width: 600px) {
+    .btn-whatsapp { font-size: 0.85rem; padding: 16px 22px; letter-spacing: 0.02em; }
+    .btn-whatsapp svg { width: 18px; height: 18px; }
+  }
+
+  /* compact variant used inside Card 03 */
+  .btn-whatsapp-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--whatsapp);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    padding: 12px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+    margin-top: 18px;
+  }
+  .btn-whatsapp-card svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .btn-whatsapp-card:hover {
+    background: var(--whatsapp-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.42);
+  }
+
+  /* ========== STEPS ========== */
+  .steps-section { padding: 56px 0 32px; }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1100px;
+    margin: 40px auto 0;
+  }
+  @media (max-width: 880px) {
+    .steps-grid { grid-template-columns: 1fr; gap: 60px; }
+  }
+
+  .step-card {
+    position: relative;
+    background:
+      radial-gradient(circle at top right, rgba(255, 101, 0, 0.08), transparent 60%),
+      var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 56px 28px 28px;
+    text-align: center;
+  }
+  .step-num {
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(255, 101, 0, 0.45);
+    border: 2px solid #ffaa66;
+  }
+  .step-title {
+    margin-bottom: 16px;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .step-text {
+    color: var(--muted-soft);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .step-text .em-white {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .step-text .em-white-u {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .step-text .em-orange {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ========== ADDEVENT WIDGET ========== */
+  .calendar-widget {
+    margin-top: 24px;
+    padding: 16px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+  .calendar-widget-label {
+    font-size: 13px;
+    color: #000000;
+    font-weight: 700;
+    font-family: 'Google Sans', sans-serif;
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .calendar-widget-icons {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .calendar-widget-icons a {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  .calendar-widget-icons a:hover { transform: scale(1.12); }
+  .calendar-widget-icons img {
+    width: 30px !important;
+    height: auto;
+    display: block;
+  }
+
+  /* ========== TESTIMONIALS ========== */
+  .testimonials {
+    padding: 64px 0 48px;
+    text-align: center;
+  }
+  .testimonials h2 {
+    max-width: 900px;
+    margin: 0 auto 16px;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .testimonials .lead {
+    max-width: 720px;
+    margin: 0 auto 40px;
+    font-size: 1rem;
+  }
+  /* === Témoignages style "screenshots Discord posés sur la page" — masonry CSS columns (taille proportionnelle au contenu) === */
+  .testi-grid {
+    display: block;
+    column-count: 2;
+    column-gap: 32px;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  @media (max-width: 700px) {
+    .testi-grid { column-count: 1; column-gap: 0; }
+  }
+  .testi-card {
+    display: block;
+    background: #313338;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 14px 18px 14px 70px;
+    text-align: left;
+    position: relative;
+    min-height: 60px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.3);
+    font-family: inherit;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .testi-card + .testi-card { margin-top: 0; }
+  .testi-avatar {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .testi-avatar-1 { background: linear-gradient(135deg, #ff6500, #c14d00); }
+  .testi-avatar-2 { background: linear-gradient(135deg, #5865f2, #4651d6); }
+  .testi-avatar-3 { background: linear-gradient(135deg, #b97aff, #7a4eff); }
+  .testi-avatar-4 { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .testi-avatar-5 { background: linear-gradient(135deg, #eb459e, #c63380); }
+  .testi-avatar-6 { background: linear-gradient(135deg, #fee75c, #c8a93b); color: #1a1a1a; }
+  .testi-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    line-height: 1.375;
+    margin-bottom: 0;
+  }
+  .testi-name {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 1rem;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    line-height: 1.375;
+  }
+  .testi-name-1 { color: #ff8a4d; }      /* role color photographe */
+  .testi-name-2 { color: #5865f2; }      /* role color monteur (blurple) */
+  .testi-name-3 { color: #b97aff; }      /* role color designer */
+  .testi-name-4 { color: #3ba55c; }      /* role color vidéaste (green) */
+  .testi-name-5 { color: #eb459e; }      /* role color directrice artistique (pink) */
+  .testi-name-6 { color: #fee75c; }      /* role color motion designer (yellow) */
+  .testi-date {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+  }
+  .testi-text {
+    color: #dcddde;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    margin-top: 0;
+  }
+  .testi-text strong { color: #ffffff; font-weight: 600; }
+  .testi-reactions {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .testi-reaction {
+    background: rgba(88, 101, 242, 0.15);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.9);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    font-weight: 500;
+    cursor: default;
+  }
+  .testi-reaction:hover { background: rgba(88, 101, 242, 0.25); }
+
+  /* Reply thread (au-dessus du message, comme dans Discord) */
+  .testi-reply {
+    position: relative;
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    margin-top: 0;
+    padding-left: 22px;
+  }
+  .testi-reply::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 50%;
+    width: 44px;
+    height: 50%;
+    border-left: 2px solid rgba(255, 255, 255, 0.18);
+    border-top: 2px solid rgba(255, 255, 255, 0.18);
+    border-top-left-radius: 8px;
+    pointer-events: none;
+  }
+  .testi-reply strong { color: rgba(255, 255, 255, 0.85); font-weight: 600; }
+
+  /* Embed Discord (image preview pour renforcer le côté "vrai screenshot") */
+  .testi-embed {
+    margin-top: 8px;
+    background: #2b2d31;
+    border-left: 4px solid #ff6500;
+    border-radius: 4px;
+    padding: 10px 14px;
+    max-width: 380px;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+  }
+  .testi-embed-title {
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .testi-embed-text {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+  .testi-embed-text strong { color: #ffffff; font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .testi-card { padding: 12px 14px 12px 60px; }
+    .testi-avatar { width: 36px; height: 36px; font-size: 0.85rem; left: 12px; top: 12px; }
+  }
+
+  /* ========== CTA FINAL ========== */
+  .cta-final {
+    padding: 56px 0 64px;
+    text-align: center;
+  }
+  .cta-final-date {
+    margin-top: 18px;
+    color: var(--muted-soft);
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+
+  /* ========== FOOTER ========== */
+  .ais-confirmation footer {
+    padding: 48px 0 32px;
+    margin-top: 16px;
+    border-top: none;
+    text-align: center;
+  }
+  .ais-confirmation footer .footer-logo {
+    display: block;
+    max-width: 220px !important;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 16px;
+    opacity: 0.85;
+  }
+  .ais-confirmation footer .copy {
+    color: var(--muted-soft);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 600px) {
+    .ais-confirmation footer .footer-logo { max-width: 170px !important; }
+  }
+
+  /* ========== REVEAL ========== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+<style>
+/* === lp-systemio auto-fix : anti force-dark MIUI on gradient-clip titles === */
+h1, h2, h3 {
+  color: #ffffff;
+  forced-color-adjust: none;
+}
+</style>
+
+</head>
+<body>
+<!-- AI Studio Experience — Confirmation — fragment HTML pour bloc Systeme.io -->
+
+<div class="ais-confirmation">
+
+  <!-- ========== TOP BAR PROGRESS (sticky — vraie barre ~80%) ========== -->
+  <div class="topbar-wrap">
+    <div class="topbar-progress">
+      <span class="topbar-progress-label">Inscription presque finalisée&nbsp;&#9888;&#65039;</span>
+      <div class="topbar-progress-bar">
+        <div class="topbar-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BLOC URGENCE ========== -->
+  <section class="urgence">
+    <div class="container">
+      <h1 class="warning reveal">&#9888;&#65039; Ne ferme pas cette page&nbsp;:</h1>
+      <p class="urgence-sub reveal">Complète les <em>3 étapes</em> ci-dessous pour confirmer ton inscription&nbsp;:</p>
+    </div>
+  </section>
+
+  <!-- ========== VIDEO ========== -->
+  <section class="video-section">
+    <div class="container">
+      <div class="video-desktop reveal">
+        <div class="video-placeholder">
+          <span class="play-pulse"></span>
+          <div class="play-icon"></div>
+        </div>
+      </div>
+      <div class="video-mobile reveal">
+        <div class="video-placeholder">
+          <span class="play-pulse"></span>
+          <div class="play-icon"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHATSAPP INTRO ========== -->
+  <section class="whatsapp-intro">
+    <div class="container">
+      <h2 class="reveal">Rejoins le groupe <em>WhatsApp</em> pour recevoir tes liens &amp; ressources</h2>
+      <a class="btn-whatsapp reveal" href="https://chat.whatsapp.com/DoRkbslr3HAL5ta9Wxlnk3" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+        </svg>
+        Rejoindre le groupe WhatsApp (gratuit)
+      </a>
+      <p class="whatsapp-sub reveal">Et bénéficie des rappels et contenus exclusifs</p>
+    </div>
+  </section>
+
+  <!-- ========== 3 STEPS ========== -->
+  <section class="steps-section">
+    <div class="container">
+      <div class="steps-grid">
+
+        <!-- Step 01 -->
+        <div class="step-card reveal">
+          <div class="step-num">1</div>
+          <h3 class="step-title">Vérifie ta boîte mail</h3>
+          <p class="step-text">
+            Tu devrais avoir reçu <span class="em-white">un email de confirmation</span>. C'est aussi par là que tu recevras ton <span class="em-white">lien d'accès privé</span> pour nous rejoindre en direct dimanche. Si tu ne le vois pas, <span class="em-white-u">pense à regarder dans tes spams</span>&nbsp;!
+          </p>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="step-card reveal">
+          <div class="step-num">2</div>
+          <h3 class="step-title">Bloque la date dans ton agenda</h3>
+          <p class="step-text">
+            Prévois ta soirée le <span class="em-orange">dimanche 28 juin</span> à <span class="em-orange">20h</span> et trouve un endroit calme avec ta boisson préférée. Crois-moi, <span class="em-white">tu ne voudras RIEN manquer</span> de cet événement inédit.
+          </p>
+          <div class="calendar-widget">
+            <p class="calendar-widget-label">Add to Calendar</p>
+            <p class="calendar-widget-icons">
+              <!-- TODO: replace REPLACE_WITH_ADDEVENT_ID with the real event ID once Nico creates the event on addevent.com -->
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+apple" title="Apple" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-apple-t1.png" alt="Apple" width="30" /></a>
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+google" title="Google" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-google-t1.png" alt="Google" width="30" /></a>
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+office365" title="Office 365" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-office365-t1.png" alt="Office 365" width="30" /></a>
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+outlook" title="Outlook" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-outlook-t1.png" alt="Outlook" width="30" /></a>
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+outlookcom" title="Outlook.com" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-outlookcom-t1.png" alt="Outlook.com" width="30" /></a>
+              <a href="https://www.addevent.com/event/REPLACE_WITH_ADDEVENT_ID+yahoo" title="Yahoo" target="_blank" rel="noopener"><img src="https://cdn.addevent.com/libs/imgs/icon-emd-share-yahoo-t1.png" alt="Yahoo" width="30" /></a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 03 - WhatsApp WHY -->
+        <div class="step-card reveal">
+          <div class="step-num">3</div>
+          <h3 class="step-title">Rejoindre le groupe WhatsApp</h3>
+          <p class="step-text">
+            C'est là que tu recevras le <span class="em-white">lien d'accès au live</span>, les <span class="em-white">rappels J-1 et H-1</span>, et les <span class="em-white">ressources exclusives</span> de la session. Si tu n'es pas dans le groupe, tu rates le live.
+          </p>
+          <a class="btn-whatsapp-card" href="https://chat.whatsapp.com/DoRkbslr3HAL5ta9Wxlnk3" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+            </svg>
+            Rejoindre le groupe
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="reveal">Et en attendant <em>l'atelier en direct</em></h2>
+      <p class="lead reveal">Découvre le parcours de nos élèves qui ont utilisé l'IA pour générer leurs premiers revenus en partant de zéro.</p>
+      <div class="testi-grid">
+        <!-- NOTE : témoignages fictifs (placeholder éditorial) en aspect Discord réel observé via Chrome MCP 31/05. À swap par vrais témoignages quand Nico fournira. -->
+
+        <!-- Témoignage 1 -->
+        <div class="testi-card reveal">
+          <div class="testi-avatar testi-avatar-1">ML</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-1">Marie L.</span>
+            <span class="testi-date">05/04/2026 17:23</span>
+          </div>
+          <p class="testi-text">
+            Premier mois après le pivot Studio IA : <strong>4 200€ avec 3 clients récurrents</strong>. Avant je vendais des shootings à 350€ pour 3 jours. Là un client paye <strong>1 400€/mois</strong> pour qu'on génère ses visuels marque. Le ratio temps/revenu n'a juste plus rien à voir.
+          </p>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 28</span>
+            <span class="testi-reaction">❤️ 14</span>
+            <span class="testi-reaction">🙌 7</span>
+          </div>
+        </div>
+
+        <!-- Témoignage 2 -->
+        <div class="testi-card reveal">
+          <div class="testi-avatar testi-avatar-2">TR</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-2">Thomas R.</span>
+            <span class="testi-date">22/04/2026 11:47</span>
+          </div>
+          <p class="testi-text">
+            CA de fin de mois : <strong>7 130 €</strong>. Je me souviens encore quand je facturais 500 € la semaine en pur montage. Maintenant : 4 clients à 1k–2k/mois en packs vidéo IA + montage.
+          </p>
+          <div class="testi-embed">
+            <div class="testi-embed-title">📈 Dashboard Studio IA — Avril 2026</div>
+            <div class="testi-embed-text">
+              Revenus encaissés ce mois : <strong>7 130 €</strong><br>
+              Clients récurrents actifs : <strong>4</strong> · Ticket moyen : <strong>1 782 €/mois</strong>
+            </div>
+          </div>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 31</span>
+            <span class="testi-reaction">👏 12</span>
+          </div>
+        </div>
+
+        <!-- Témoignage 3 — avec reply thread Nicolas -->
+        <div class="testi-card reveal">
+          <div class="testi-reply">
+            ↳ <strong>Nicolas De fon</strong> : Bravo Sophie 👏 c'est exactement la mécanique : vendre un actif récurrent au lieu de son temps.
+          </div>
+          <div class="testi-avatar testi-avatar-3">SM</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-3">Sophie M.</span>
+            <span class="testi-date">29/04/2026 09:12</span>
+          </div>
+          <p class="testi-text">
+            Premier vrai <strong>10K propre, sans courir derrière</strong>. 4 ans freelance, je facturais 60€/h, 50h/semaine, 4–5k mois. Là je travaille <strong>25h/semaine avec mon Studio IA</strong> et je passe les 10k. Le secret c'est que j'ai arrêté de vendre des heures et j'ai vendu un livrable IA récurrent. 🚀
+          </p>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 42</span>
+            <span class="testi-reaction">❤️ 19</span>
+            <span class="testi-reaction">💎 6</span>
+          </div>
+        </div>
+
+        <!-- Témoignage 4 -->
+        <div class="testi-card reveal">
+          <div class="testi-avatar testi-avatar-4">AD</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-4">Antoine D.</span>
+            <span class="testi-date">14/05/2026 22:08</span>
+          </div>
+          <p class="testi-text">
+            Pour ceux qui hésitent encore : <strong>0 client</strong> quand j'ai démarré le Studio IA il y a 2 mois. Aujourd'hui <strong>6 clients à 1k–2k/mois en récurrent</strong>. La valeur perçue d'un Studio IA est tellement plus haute qu'un freelance solo classique que les gens signent sans négocier. Game changer 🙏
+          </p>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 35</span>
+            <span class="testi-reaction">👀 23</span>
+            <span class="testi-reaction">🙌 11</span>
+          </div>
+        </div>
+
+        <!-- Témoignage 5 -->
+        <div class="testi-card reveal">
+          <div class="testi-avatar testi-avatar-5">LK</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-5">Léa K.</span>
+            <span class="testi-date">20/05/2026 08:34</span>
+          </div>
+          <p class="testi-text">
+            8 ans en agence à 38k€ brut, j'avais plafonné. J'ai lancé mon Studio IA en parallèle en mars. <strong>3 800 €/mois</strong> à 2 clients récurrents en plus de mon salaire. À ce rythme je quitte mon CDI fin d'année. Merci pour la méthode 🙏
+          </p>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 26</span>
+            <span class="testi-reaction">💪 9</span>
+          </div>
+        </div>
+
+        <!-- Témoignage 6 -->
+        <div class="testi-card reveal">
+          <div class="testi-avatar testi-avatar-6">MB</div>
+          <div class="testi-header">
+            <span class="testi-name testi-name-6">Maxime B.</span>
+            <span class="testi-date">27/05/2026 16:51</span>
+          </div>
+          <p class="testi-text">
+            3 mois après le déclic Studio IA : <strong>5 200 €</strong> le mois dernier en 100% remote depuis Bali. Ratio qualité de vie / revenu n'a jamais été aussi bon. Les clients reviennent parce qu'on leur livre des assets exploitables ad infinitum.
+          </p>
+          <div class="testi-reactions">
+            <span class="testi-reaction">🔥 38</span>
+            <span class="testi-reaction">🌴 14</span>
+            <span class="testi-reaction">💎 4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA FINAL ========== -->
+  <section class="cta-final">
+    <div class="container">
+      <a class="btn-whatsapp reveal" href="https://chat.whatsapp.com/DoRkbslr3HAL5ta9Wxlnk3" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+        </svg>
+        Rejoindre le groupe WhatsApp
+      </a>
+      <p class="cta-final-date">Dim. 28 juin 2026 &mdash; 20h00</p>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <img class="footer-logo" src="./assets/logos/ai-studio-experience-logo-white.png" alt="AI Studio Experience" />
+      <p class="copy">&copy; 2026 AI Studio Experience. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+</div>
+<!-- /AI Studio Experience — Confirmation -->
+
+</body>
+<script>
+(function(){
+  function __lpsysio_init() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __lpsysio_init);
+  } else {
+    __lpsysio_init();
+  }
+})();
+</script>
+
+</body>
+</html>
