@@ -863,9 +863,23 @@ h1, h2, h3 {
     padding: 12px 14px;
     font-size: 0.68rem;
     letter-spacing: 0.08em;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    white-space: nowrap;
   }
   .ais-topbar__sep { display: none; }
+  .ais-topbar__countdown { white-space: nowrap; }
+}
+@media (max-width: 400px) {
+  .ais-topbar {
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    padding: 12px 10px;
+  }
+  .ais-topbar__countdown::before {
+    width: 6px;
+    height: 6px;
+  }
+  .ais-topbar__countdown { gap: 8px; }
 }
 </style>
 <style>
@@ -896,39 +910,8 @@ h1, h2, h3 {
 <!-- AI Studio Experience — fragment HTML pour bloc Systeme.io -->
 
 <div class="ais-topbar">
-  <span class="ais-topbar__event">Dim. 28 juin &middot; 20h</span>
-  <span class="ais-topbar__sep" aria-hidden="true"></span>
-  <span class="ais-topbar__countdown">Inscriptions ferment dans<span class="num" id="ais-cd-d">--j</span><span class="num" id="ais-cd-h">--h</span><span class="num" id="ais-cd-m">--m</span><span class="num" id="ais-cd-s">--s</span></span>
+  <span class="ais-topbar__countdown">Inscription ferme dans 25 jours</span>
 </div>
-<script>
-(function() {
-  // Cible : 28 juin 2026 à 20:00 heure de Paris.
-  // Si la date est dans le futur → countdown réel. Si dépassée → afficher "C'EST MAINTENANT".
-  var target = new Date('2026-06-28T20:00:00+02:00').getTime();
-  var d = document.getElementById('ais-cd-d');
-  var h = document.getElementById('ais-cd-h');
-  var m = document.getElementById('ais-cd-m');
-  var s = document.getElementById('ais-cd-s');
-  function tick() {
-    var diff = target - Date.now();
-    if (diff <= 0) {
-      var bar = document.querySelector('.ais-topbar__countdown');
-      if (bar) bar.textContent = "C'est maintenant — rejoignez le live";
-      return;
-    }
-    var days = Math.floor(diff / 86400000);
-    var hours = Math.floor((diff % 86400000) / 3600000);
-    var mins = Math.floor((diff % 3600000) / 60000);
-    var secs = Math.floor((diff % 60000) / 1000);
-    if (d) d.textContent = days + 'j';
-    if (h) h.textContent = hours + 'h';
-    if (m) m.textContent = mins + 'm';
-    if (s) s.textContent = secs + 's';
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
-</script>
 
 <div class="ais-landing">
 
@@ -944,7 +927,7 @@ h1, h2, h3 {
   <div class="hero-content reveal">
     <div class="eyebrow">
       <span class="dot"></span>
-      <span>Atelier live — Dim. 28 juin · 20h</span>
+      <span>Inscription ferme dans 25 jours, 21 heures et 49 minutes</span>
     </div>
     <img src="./assets/logos/ai-studio-experience-logo-white.png" alt="AI Studio Experience™" class="hero-logo" />
     <p class="lead">2 heures pour comprendre comment <em>lancer votre Studio IA</em> et dépasser les 10 000€ par mois en tant que créatif freelance.</p>
@@ -1250,7 +1233,7 @@ h1, h2, h3 {
 <footer>
   <div class="container">
     <div class="logo">AI Studio Experience™</div>
-    <p>Atelier live — Dim. 28 juin 2026 · 20h · En ligne · Gratuit</p>
+    <p>Inscription ferme dans 25 jours, 21 heures et 49 minutes</p>
     <p style="margin-top:12px;font-size:0.75rem;">© 2026 — Tous droits réservés</p>
   </div>
 </footer>
