@@ -861,25 +861,14 @@ h1, h2, h3 {
   .ais-topbar {
     gap: 14px;
     padding: 12px 14px;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     letter-spacing: 0.08em;
     flex-wrap: nowrap;
     white-space: nowrap;
   }
   .ais-topbar__sep { display: none; }
-  .ais-topbar__countdown { white-space: nowrap; }
-}
-@media (max-width: 400px) {
-  .ais-topbar {
-    font-size: 0.6rem;
-    letter-spacing: 0.06em;
-    padding: 12px 10px;
-  }
-  .ais-topbar__countdown::before {
-    width: 6px;
-    height: 6px;
-  }
-  .ais-topbar__countdown { gap: 8px; }
+  .ais-topbar__countdown { white-space: nowrap; gap: 8px; }
+  .ais-topbar__countdown .ais-hide-mobile { display: none !important; }
 }
 </style>
 <style>
@@ -910,8 +899,35 @@ h1, h2, h3 {
 <!-- AI Studio Experience — fragment HTML pour bloc Systeme.io -->
 
 <div class="ais-topbar">
-  <span class="ais-topbar__countdown">Inscription ferme dans 25 jours</span>
+  <span class="ais-topbar__countdown">Inscription ferme dans<span class="num" id="ais-cd-d">--j</span><span class="num ais-hide-mobile" id="ais-cd-h">--h</span><span class="num ais-hide-mobile" id="ais-cd-m">--m</span><span class="num ais-hide-mobile" id="ais-cd-s">--s</span></span>
 </div>
+<script>
+(function() {
+  var target = new Date('2026-06-28T20:00:00+02:00').getTime();
+  var d = document.getElementById('ais-cd-d');
+  var h = document.getElementById('ais-cd-h');
+  var m = document.getElementById('ais-cd-m');
+  var s = document.getElementById('ais-cd-s');
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      var bar = document.querySelector('.ais-topbar__countdown');
+      if (bar) bar.textContent = "C'est maintenant — rejoignez le live";
+      return;
+    }
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins = Math.floor((diff % 3600000) / 60000);
+    var secs = Math.floor((diff % 60000) / 1000);
+    if (d) d.textContent = days + 'j';
+    if (h) h.textContent = hours + 'h';
+    if (m) m.textContent = mins + 'm';
+    if (s) s.textContent = secs + 's';
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
 
 <div class="ais-landing">
 
