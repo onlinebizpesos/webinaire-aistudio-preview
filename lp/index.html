@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>ai-studio-experience — Preview</title>
 <style>
 /* === lp-systemio auto-fix : reset + anti-bandes Systeme.io === */
+:root { color-scheme: dark; }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { overflow-x: hidden !important; }
 body {
@@ -46,7 +48,7 @@ body { background: #000 !important; }
     --ink: #0a0a0a;          /* texte sur fond orange */
     --dark-orange: #7a2e00;  /* italique sur fond clair (rarely used) */
     --muted: #ffffff;        /* WAS rgba .65 — passé en blanc plein (Loom #3 demande #4, #6) */
-    --line: rgba(255, 255, 255, 0.12);
+    --line: rgba(255, 255, 255, 0.25);
     --card: rgba(255, 255, 255, 0.04);
     --radius: 18px;
     --max: 1200px;
@@ -100,18 +102,12 @@ body { background: #000 !important; }
     font-feature-settings: "kern";
   }
   .ais-landing h2 em {
-    -webkit-text-fill-color: var(--accent);
-    background: none;
-    -webkit-background-clip: initial;
-    background-clip: initial;
+    color: var(--accent);
   }
   .ais-landing h1 { font-size: clamp(1.8rem, 4vw, 3rem); }
   .ais-landing h2 {
     font-size: clamp(1.5rem, 3.2vw, 2.6rem);
-    background: linear-gradient(135deg, #ffffff 0%, #ffd2b0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff;
   }
   .ais-landing h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
   .ais-landing p  { font-size: clamp(0.9rem, 1vw, 1rem); color: var(--muted); }
