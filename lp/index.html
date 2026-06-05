@@ -840,7 +840,12 @@ h1, h2, h3 {
   align-items: center;
   gap: 10px;
 }
-.ais-topbar__countdown::before {
+.ais-topbar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.ais-topbar__label::before {
   content: '';
   width: 8px;
   height: 8px;
@@ -849,29 +854,35 @@ h1, h2, h3 {
   box-shadow: 0 0 14px #ff6500;
   animation: ais-topbar-pulse 1.6s infinite;
 }
+.ais-topbar__nums {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 .ais-topbar__countdown .num {
   font-variant-numeric: tabular-nums;
   color: #ffffff;
   letter-spacing: 0;
-  margin-left: 8px;
 }
-.ais-topbar__countdown .num:first-of-type { margin-left: 6px; }
 @keyframes ais-topbar-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.85); }
 }
 @media (max-width: 768px) {
   .ais-topbar {
-    gap: 14px;
-    padding: 12px 14px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 14px;
     font-size: 0.72rem;
     letter-spacing: 0.08em;
-    flex-wrap: nowrap;
-    white-space: nowrap;
   }
   .ais-topbar__sep { display: none; }
-  .ais-topbar__countdown { white-space: nowrap; gap: 8px; }
-  .ais-topbar__countdown .ais-hide-mobile { display: none !important; }
+  .ais-topbar__countdown {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .ais-topbar__nums { gap: 10px; }
 }
 </style>
 <style>
@@ -902,7 +913,15 @@ h1, h2, h3 {
 <!-- AI Studio Experience — fragment HTML pour bloc Systeme.io -->
 
 <div class="ais-topbar">
-  <span class="ais-topbar__countdown">Inscription ferme dans<span class="num" id="ais-cd-d">--j</span><span class="num ais-hide-mobile" id="ais-cd-h">--h</span><span class="num ais-hide-mobile" id="ais-cd-m">--m</span><span class="num ais-hide-mobile" id="ais-cd-s">--s</span></span>
+  <span class="ais-topbar__countdown">
+    <span class="ais-topbar__label">Inscription ferme dans</span>
+    <span class="ais-topbar__nums">
+      <span class="num" id="ais-cd-d">--j</span>
+      <span class="num" id="ais-cd-h">--h</span>
+      <span class="num" id="ais-cd-m">--m</span>
+      <span class="num" id="ais-cd-s">--s</span>
+    </span>
+  </span>
 </div>
 <script>
 (function() {
