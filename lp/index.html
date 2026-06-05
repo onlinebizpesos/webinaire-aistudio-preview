@@ -683,50 +683,103 @@ body { background: #000 !important; }
     margin-left: auto;
     margin-right: auto;
   }
+  /* ========== TESTIMONIALS — Trustpilot-style cards (V8) ========== */
   .testi-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    max-width: 1100px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 0 24px;
   }
   .testi-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 32px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 28px 22px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
     text-align: left;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    forced-color-adjust: none;
+  }
+  .testi-card__stars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+  .testi-card__stars svg {
+    width: 24px;
+    height: 24px;
+    display: block;
   }
   .testi-card__quote {
-    color: #ffffff;
-    font-family: 'Google Sans', 'Google Sans Flex', sans-serif;
-    font-size: 0.95rem;
-    line-height: 1.55;
-    margin: 0;
-  }
-  .testi-card__role {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
+    color: #191919;
+    font-family: 'Public Sans', 'Inter', system-ui, sans-serif;
     font-size: 1rem;
-    color: #ffffff;
-    margin: 0;
-    letter-spacing: -0.02em;
+    line-height: 1.55;
+    margin: 0 0 22px;
+    font-weight: 400;
+    flex: 1;
+  }
+  .testi-card__sep {
+    border: 0;
+    border-top: 1px solid #E5E7EB;
+    margin: 0 0 18px;
+  }
+  .testi-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .testi-card__author {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
   .testi-card__name {
-    font-family: 'Google Sans', 'Google Sans Flex', sans-serif;
+    font-family: 'Public Sans', 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #191919;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .testi-card__role {
+    font-family: 'Public Sans', 'Inter', system-ui, sans-serif;
     font-weight: 400;
-    font-size: 0.85rem;
-    color: #ffffff;
+    font-size: 0.78rem;
+    color: #6B7280;
     margin: 0;
   }
-  @media (max-width: 700px) {
-    .testi-grid {
-      grid-template-columns: 1fr;
-    }
+  .testi-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #00B67A;
+    color: #ffffff;
+    padding: 8px 14px 8px 12px;
+    border-radius: 999px;
+    font-family: 'Public Sans', 'Inter', system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+  .testi-card__badge:hover { background: #009A66; }
+  .testi-card__badge svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+  }
+  @media (max-width: 980px) {
+    .testi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .testi-grid { grid-template-columns: 1fr; }
   }
 
   /* ========== FOOTER ========== */
@@ -1209,51 +1262,141 @@ h1, h2, h3 {
   </div>
 
   <div class="testi-grid reveal">
+    <!-- Card 1 — Ismaël -->
     <div class="testi-card">
-      <p class="testi-card__quote">"Je viens de signer Arthur 1&nbsp;500€ pour 15 video ads, il a signé le devis hier."</p>
-      <div>
-        <p class="testi-card__role">Vidéaste freelance</p>
-        <p class="testi-card__name">Ismaël</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;Je viens de signer Arthur 1&nbsp;500&nbsp;€ pour 15 video ads, il a signé le devis hier.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Ismaël</p>
+          <p class="testi-card__role">Vidéaste freelance · Mars 2026</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
 
+    <!-- Card 2 — Nastasia -->
     <div class="testi-card">
-      <p class="testi-card__quote">"Yes merci, j'ai pu upsell 1&nbsp;400€ fixe mensuel 🤝"</p>
-      <div>
-        <p class="testi-card__role">Freelance créative</p>
-        <p class="testi-card__name">Nastasia</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;Yes merci, j'ai pu upsell 1&nbsp;400&nbsp;€ fixe mensuel.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Nastasia</p>
+          <p class="testi-card__role">Freelance créative · Janvier 2026</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
 
+    <!-- Card 3 — Mathilde -->
     <div class="testi-card">
-      <p class="testi-card__quote">"Hello juste pour te tenir au jus, je signe un contrat en agence de publicité qui va me rajouter 2&nbsp;000€ de CA chaque mois en plus 🤩 très contente de ce nouveau step."</p>
-      <div>
-        <p class="testi-card__role">Directrice artistique</p>
-        <p class="testi-card__name">Mathilde</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;Je signe un contrat en agence de publicité qui va me rajouter 2&nbsp;000&nbsp;€ de CA chaque mois en plus. Très contente de ce nouveau step.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Mathilde</p>
+          <p class="testi-card__role">Directrice artistique · Avril 2026</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
 
+    <!-- Card 4 — Christophe -->
     <div class="testi-card">
-      <p class="testi-card__quote">"Là je viens de capter des trucs que tu m'as dit donc j'avance 1&nbsp;000 fois plus vite."</p>
-      <div>
-        <p class="testi-card__role">Monteur vidéo</p>
-        <p class="testi-card__name">Christophe</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;Là je viens de capter des trucs que tu m'as dit, j'avance 1&nbsp;000 fois plus vite. Méthode clean et workflow IA imparables.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Christophe</p>
+          <p class="testi-card__role">Monteur vidéo · Décembre 2025</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
 
+    <!-- Card 5 — Julien P. -->
     <div class="testi-card">
-      <p class="testi-card__quote">"J'ai compris pourquoi je stagnais. Le shift mental + les outils m'ont fait passer un cap que je pensais inatteignable."</p>
-      <div>
-        <p class="testi-card__role">Filmmaker</p>
-        <p class="testi-card__name">Julien P.</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;J'ai compris pourquoi je stagnais. Le shift mental + les outils m'ont fait passer un cap que je pensais inatteignable.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Julien P.</p>
+          <p class="testi-card__role">Filmmaker · Février 2026</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
 
+    <!-- Card 6 — Camille B. -->
     <div class="testi-card">
-      <p class="testi-card__quote">"En tant que graphiste je pensais que l'IA me tuerait. C'est l'inverse : elle multiplie ma valeur sur chaque projet."</p>
-      <div>
-        <p class="testi-card__role">Graphiste</p>
-        <p class="testi-card__name">Camille B.</p>
+      <div class="testi-card__stars" aria-label="Noté 5 sur 5 étoiles">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" fill="#00B67A"/><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+      </div>
+      <p class="testi-card__quote">«&nbsp;En tant que graphiste je pensais que l'IA me tuerait. C'est l'inverse&nbsp;: elle multiplie ma valeur sur chaque projet.&nbsp;»</p>
+      <hr class="testi-card__sep">
+      <div class="testi-card__footer">
+        <div class="testi-card__author">
+          <p class="testi-card__name">Camille B.</p>
+          <p class="testi-card__role">Graphiste · Mai 2026</p>
+        </div>
+        <a class="testi-card__badge" href="#" rel="noopener" aria-label="Avis Trustpilot">
+          <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M48 64.7 62.6 61l6.1 18.8L48 64.7Zm33.6-24.3H55.9L48 16.2l-7.9 24.2H14.4l20.8 15-7.9 24.2 20.8-15 12.8-9.2 20.7-15Z"/></svg>
+          Trustpilot
+        </a>
       </div>
     </div>
   </div>
