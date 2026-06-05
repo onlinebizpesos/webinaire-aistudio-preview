@@ -8,6 +8,10 @@
 <style>
 /* === lp-systemio auto-fix : reset + anti-bandes Systeme.io === */
 :root { color-scheme: dark; }
+
+/* Hide leftover Systeme.io native widgets that squat the page (cannot delete via editor without freeze) */
+#countdown-551069bc, #countdown-2203d3af, #headline-0f9f718f { display: none !important; }
+[id^="countdown-"], #headline-0f9f718f { display: none !important; }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { overflow-x: hidden !important; }
 body {
