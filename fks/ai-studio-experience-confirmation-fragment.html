@@ -1,0 +1,737 @@
+<!-- AI Studio Experience — Confirmation — fragment HTML pour bloc Systeme.io -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  .ais-confirmation {
+    --bg: #000000;
+    --text: #ffffff;
+    --accent: #ff6500;
+    --muted: rgba(255, 255, 255, 0.65);
+    --line: rgba(255, 255, 255, 0.12);
+    --card: rgba(255, 255, 255, 0.04);
+    --radius: 18px;
+    --max: 1200px;
+  }
+  .ais-confirmation, .ais-confirmation * { box-sizing: border-box; }
+  .ais-confirmation {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    position: relative;
+    width: 100%;
+  }
+  .ais-confirmation * { margin: 0; padding: 0; }
+
+  /* ========== TYPOGRAPHY ========== */
+  .ais-confirmation h1, .ais-confirmation h2, .ais-confirmation h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .ais-confirmation h1 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); }
+  .ais-confirmation h2 {
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    background: linear-gradient(135deg, #ffffff 0%, #ffd2b0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .ais-confirmation h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
+  .ais-confirmation p { font-size: clamp(0.9rem, 1vw, 1rem); color: var(--muted); }
+  .ais-confirmation .accent { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+  /* ========== LAYOUT ========== */
+  .ais-confirmation .container {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .ais-confirmation section { position: relative; }
+
+  /* ========== CTA ========== */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 16px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+  .cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(255, 101, 0, 0.45);
+  }
+  .cta::after {
+    content: '→';
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  .cta:hover::after { transform: translateX(4px); }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    margin-bottom: 32px;
+  }
+  .eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ========== HERO ========== */
+  .hero-confirm {
+    text-align: center;
+    padding: 140px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-confirm::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at center top, rgba(255,101,0,0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-confirm .container { position: relative; z-index: 1; }
+  .progress-wrap {
+    max-width: 380px;
+    margin: 0 auto 40px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .progress-header .pct {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #ff8533, var(--accent));
+    border-radius: 999px;
+    animation: progressFill 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards 0.4s;
+    box-shadow: 0 0 12px rgba(255,101,0,0.6);
+    position: relative;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s linear infinite 2.2s;
+  }
+  @keyframes progressFill { from { width: 0; } to { width: 80%; } }
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  .hero-confirm h1 {
+    max-width: 820px;
+    margin: 0 auto;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .hero-confirm h1 .highlight {
+    color: var(--accent);
+  }
+
+  /* ========== VIDEO ========== */
+  .video-section { padding: 40px 0 80px; }
+  .video-placeholder {
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16/9;
+    margin: 0 auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,101,0,0.08), transparent 70%),
+      #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px dashed rgba(255,255,255,0.1);
+    border-radius: calc(var(--radius) - 8px);
+    pointer-events: none;
+  }
+  .video-placeholder .play-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(255,101,0,0.18);
+    border: 1px solid rgba(255,101,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+  }
+  .video-placeholder .play-icon::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 18px solid var(--accent);
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    margin-left: 4px;
+  }
+  .video-placeholder .play-pulse {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    animation: playPulse 2.5s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes playPulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  /* ========== STEPS ========== */
+  .step-section { padding: 40px 0; }
+  .step-card {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 56px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 101, 0, 0.25);
+    background:
+      radial-gradient(circle at top right, rgba(255,101,0,0.12), transparent 60%),
+      #0a0a0a;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 56px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,101,0,0.6), transparent);
+  }
+  .step-svg {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-svg svg { width: 100%; height: 100%; display: block; }
+  .step-text h2 { margin-bottom: 18px; }
+  .step-text p { margin-bottom: 28px; }
+
+  /* ========== FOOTER ========== */
+  .ais-confirmation footer {
+    padding: 60px 0 40px;
+    margin-top: 80px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .ais-confirmation footer .logo {
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ========== REVEAL ========== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 820px) {
+    .hero-confirm { padding: 100px 0 40px; }
+    .step-card {
+      grid-template-columns: 1fr;
+      padding: 40px 28px;
+      gap: 32px;
+      text-align: center;
+    }
+    .step-svg {
+      max-width: 220px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<div class="ais-confirmation">
+
+<!-- ========== HERO ========== -->
+<section class="hero-confirm">
+  <div class="container">
+    <div class="eyebrow reveal">
+      <span class="dot"></span>
+      <span>Inscription presque finalisée</span>
+    </div>
+    <div class="progress-wrap reveal">
+      <div class="progress-header">
+        <span>Progression</span>
+        <span class="pct">80%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+    <h1 class="reveal">Il vous reste une <span class="highlight">dernière étape</span> pour réserver votre place gratuitement pour l'AI Studio Experience<span class="accent">™</span>.</h1>
+  </div>
+</section>
+
+<!-- ========== VIDEO ========== -->
+<section class="video-section">
+  <div class="container">
+    <div class="video-placeholder reveal">
+      <span class="play-pulse"></span>
+      <div class="play-icon"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 1 : COMMUNITY ========== -->
+<section class="step-section">
+  <div class="container">
+    <div class="step-card reveal">
+      <div class="step-svg">
+        <!-- Network with animated bubble messages -->
+        <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="centerGlow1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff8533"/>
+              <stop offset="100%" stop-color="#ff6500"/>
+            </radialGradient>
+            <filter id="softGlow1" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="4"/>
+            </filter>
+          </defs>
+
+          <!-- Background rings -->
+          <circle cx="120" cy="120" r="105" fill="none" stroke="rgba(255,101,0,0.08)" stroke-width="1" stroke-dasharray="2 4"/>
+          <circle cx="120" cy="120" r="75" fill="none" stroke="rgba(255,101,0,0.12)" stroke-width="1"/>
+
+          <!-- Connection lines pulsing -->
+          <g stroke="#ff6500" stroke-width="1.2" stroke-linecap="round">
+            <line x1="120" y1="120" x2="50" y2="55" opacity="0.3">
+              <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" repeatCount="indefinite"/>
+            </line>
+            <line x1="120" y1="120" x2="195" y2="65" opacity="0.3">
+              <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+            </line>
+            <line x1="120" y1="120" x2="205" y2="165" opacity="0.3">
+              <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+            </line>
+            <line x1="120" y1="120" x2="65" y2="200" opacity="0.3">
+              <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+            </line>
+            <line x1="120" y1="120" x2="35" y2="150" opacity="0.3">
+              <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" begin="1.2s" repeatCount="indefinite"/>
+            </line>
+          </g>
+
+          <!-- Central node (you) -->
+          <circle cx="120" cy="120" r="26" fill="#ff6500" opacity="0.25" filter="url(#softGlow1)">
+            <animate attributeName="r" values="22;30;22" dur="2.4s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="120" cy="120" r="20" fill="url(#centerGlow1)" stroke="#ffaa66" stroke-width="1.5"/>
+          <circle cx="120" cy="115" r="5" fill="#fff"/>
+          <path d="M110 130 Q120 138 130 130" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <!-- Surrounding nodes (community avatars) -->
+          <g>
+            <circle cx="50" cy="55" r="12" fill="#1a1a1a" stroke="#ff6500" stroke-width="1.5"/>
+            <circle cx="50" cy="52" r="3" fill="#ff6500"/>
+            <path d="M44 60 Q50 64 56 60" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g>
+            <circle cx="195" cy="65" r="12" fill="#1a1a1a" stroke="#ff6500" stroke-width="1.5"/>
+            <circle cx="195" cy="62" r="3" fill="#ff6500"/>
+            <path d="M189 70 Q195 74 201 70" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g>
+            <circle cx="205" cy="165" r="12" fill="#1a1a1a" stroke="#ff6500" stroke-width="1.5"/>
+            <circle cx="205" cy="162" r="3" fill="#ff6500"/>
+            <path d="M199 170 Q205 174 211 170" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g>
+            <circle cx="65" cy="200" r="12" fill="#1a1a1a" stroke="#ff6500" stroke-width="1.5"/>
+            <circle cx="65" cy="197" r="3" fill="#ff6500"/>
+            <path d="M59 205 Q65 209 71 205" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g>
+            <circle cx="35" cy="150" r="12" fill="#1a1a1a" stroke="#ff6500" stroke-width="1.5"/>
+            <circle cx="35" cy="147" r="3" fill="#ff6500"/>
+            <path d="M29 155 Q35 159 41 155" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+
+          <!-- Speech bubbles with typing dots -->
+          <!-- Bubble 1 (near top-left avatar) -->
+          <g transform="translate(72, 30)">
+            <g opacity="0">
+              <rect width="42" height="22" rx="11" fill="#ff6500"/>
+              <path d="M8 22 L12 28 L16 22 Z" fill="#ff6500"/>
+              <circle cx="14" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="21" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.15s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="28" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.3s" repeatCount="indefinite"/>
+              </circle>
+              <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.1;0.7;0.85;1" dur="4s" repeatCount="indefinite"/>
+            </g>
+          </g>
+
+          <!-- Bubble 2 (near right avatar) -->
+          <g transform="translate(155, 90)">
+            <g opacity="0">
+              <rect width="42" height="22" rx="11" fill="#ffffff"/>
+              <path d="M28 22 L32 28 L36 22 Z" fill="#ffffff"/>
+              <circle cx="14" cy="11" r="2" fill="#ff6500">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="21" cy="11" r="2" fill="#ff6500">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.15s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="28" cy="11" r="2" fill="#ff6500">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.3s" repeatCount="indefinite"/>
+              </circle>
+              <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.1;0.7;0.85;1" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+            </g>
+          </g>
+
+          <!-- Bubble 3 (near bottom-left avatar) -->
+          <g transform="translate(42, 175)">
+            <g opacity="0">
+              <rect width="42" height="22" rx="11" fill="#ff6500"/>
+              <path d="M8 22 L12 28 L16 22 Z" fill="#ff6500"/>
+              <circle cx="14" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="21" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.15s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="28" cy="11" r="2" fill="#fff">
+                <animate attributeName="cy" values="11;11;8;11;11" keyTimes="0;0.25;0.5;0.75;1" dur="1.4s" begin="0.3s" repeatCount="indefinite"/>
+              </circle>
+              <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.1;0.7;0.85;1" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+            </g>
+          </g>
+
+          <!-- Data packets traveling along lines -->
+          <circle r="2.5" fill="#ff6500">
+            <animateMotion dur="2.5s" repeatCount="indefinite" path="M50 55 L120 120"/>
+            <animate attributeName="opacity" values="0;1;1;0" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="2.5" fill="#ff6500">
+            <animateMotion dur="2.5s" begin="0.8s" repeatCount="indefinite" path="M195 65 L120 120"/>
+            <animate attributeName="opacity" values="0;1;1;0" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="2.5" fill="#ff6500">
+            <animateMotion dur="2.5s" begin="1.6s" repeatCount="indefinite" path="M120 120 L65 200"/>
+            <animate attributeName="opacity" values="0;1;1;0" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+      <div class="step-text">
+        <span class="section-tag">Étape 01</span>
+        <h2>Là où l'expérience commence</h2>
+        <p>Cliquez ici pour rejoindre le groupe de conversation. C'est là bas que vous recevrez le lien pour accéder au live.</p>
+        <a href="https://chat.whatsapp.com/DoRkbslr3HAL5ta9Wxlnk3" target="_blank" rel="noopener" class="cta">Je commence mon expérience</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 2 : CALENDAR ========== -->
+<section class="step-section" style="padding-bottom:40px;">
+  <div class="container">
+    <div class="step-card reveal">
+      <div class="step-svg">
+        <!-- Calendar with animated checkmark -->
+        <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="agendaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#1a1a1a"/>
+              <stop offset="100%" stop-color="#0a0a0a"/>
+            </linearGradient>
+            <radialGradient id="checkGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff8533"/>
+              <stop offset="100%" stop-color="#ff6500"/>
+            </radialGradient>
+            <filter id="softGlow2" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="4"/>
+            </filter>
+          </defs>
+
+          <!-- Agenda body shadow -->
+          <rect x="42" y="56" width="156" height="156" rx="10" fill="#000" opacity="0.4"/>
+
+          <!-- Agenda body -->
+          <rect x="40" y="50" width="160" height="160" rx="10" fill="url(#agendaGrad)" stroke="#ff6500" stroke-width="2"/>
+
+          <!-- Top header -->
+          <rect x="40" y="50" width="160" height="36" rx="10" fill="#1a1a1a"/>
+          <rect x="40" y="78" width="160" height="8" fill="#1a1a1a"/>
+          <line x1="40" y1="86" x2="200" y2="86" stroke="#ff6500" stroke-width="1.5"/>
+
+          <!-- Binding rings -->
+          <circle cx="70" cy="42" r="7" fill="#1a1a1a" stroke="#ff6500" stroke-width="2"/>
+          <circle cx="120" cy="42" r="7" fill="#1a1a1a" stroke="#ff6500" stroke-width="2"/>
+          <circle cx="170" cy="42" r="7" fill="#1a1a1a" stroke="#ff6500" stroke-width="2"/>
+
+          <!-- Month label -->
+          <text x="120" y="73" text-anchor="middle" fill="#ff6500" font-family="Inter, sans-serif" font-weight="700" font-size="11" letter-spacing="3">JUIN 2026</text>
+
+          <!-- Day labels (L M M J V S D) -->
+          <g font-family="Inter, sans-serif" font-size="6" font-weight="600" fill="#666" text-anchor="middle" letter-spacing="0">
+            <text x="56" y="100">L</text>
+            <text x="76" y="100">M</text>
+            <text x="96" y="100">M</text>
+            <text x="116" y="100">J</text>
+            <text x="136" y="100">V</text>
+            <text x="156" y="100">S</text>
+            <text x="176" y="100">D</text>
+          </g>
+          <line x1="46" y1="105" x2="186" y2="105" stroke="#222" stroke-width="0.5"/>
+
+          <!-- Calendar grid (subtle dots for empty days) -->
+          <g font-family="Inter, sans-serif" font-size="8" font-weight="500" fill="#666" text-anchor="middle">
+            <!-- Week 1 -->
+            <text x="56" y="122">1</text>
+            <text x="76" y="122">2</text>
+            <text x="96" y="122">3</text>
+            <text x="116" y="122">4</text>
+            <text x="136" y="122">5</text>
+            <text x="156" y="122">6</text>
+            <text x="176" y="122">7</text>
+            <!-- Week 2 -->
+            <text x="56" y="140">8</text>
+            <text x="76" y="140">9</text>
+            <text x="96" y="140">10</text>
+            <text x="116" y="140">11</text>
+            <text x="136" y="140">12</text>
+            <text x="156" y="140">13</text>
+            <text x="176" y="140">14</text>
+          </g>
+
+          <!-- Week 3 (15-21) regular -->
+          <g font-family="Inter, sans-serif" font-size="8" font-weight="500" fill="#666" text-anchor="middle">
+            <text x="56" y="160">15</text>
+            <text x="76" y="160">16</text>
+            <text x="96" y="160">17</text>
+            <text x="116" y="160">18</text>
+            <text x="136" y="160">19</text>
+            <text x="156" y="160">20</text>
+            <text x="176" y="160">21</text>
+            <!-- Week 4 (22-27) regular, 28 highlighted -->
+            <text x="56" y="178">22</text>
+            <text x="76" y="178">23</text>
+            <text x="96" y="178">24</text>
+            <text x="116" y="178">25</text>
+            <text x="136" y="178">26</text>
+            <text x="156" y="178">27</text>
+            <!-- Week 5 -->
+            <text x="56" y="196">29</text>
+            <text x="76" y="196">30</text>
+          </g>
+
+          <!-- Highlighted day 28 (dimanche) with pulsing background -->
+          <circle cx="176" cy="174" r="11" fill="#ff6500" opacity="0.25" filter="url(#softGlow2)">
+            <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="176" cy="174" r="10" fill="url(#checkGlow)" stroke="#ffaa66" stroke-width="1"/>
+          <text x="176" y="178" text-anchor="middle" fill="#000" font-family="Inter, sans-serif" font-weight="700" font-size="9">28</text>
+
+          <!-- Big floating checkmark badge (top-right) -->
+          <g transform="translate(195, 100)">
+            <circle r="22" fill="#ff6500" opacity="0.2" filter="url(#softGlow2)">
+              <animate attributeName="r" values="18;26;18" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="18" fill="url(#checkGlow)" stroke="#ffaa66" stroke-width="1.5"/>
+            <path d="M-8 -1 L-3 5 L9 -7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="28" stroke-dashoffset="28">
+              <animate attributeName="stroke-dashoffset" values="28;28;0;0;28" keyTimes="0;0.15;0.4;0.85;1" dur="3.5s" repeatCount="indefinite"/>
+            </path>
+          </g>
+
+          <!-- Bell icon (rappel) -->
+          <g transform="translate(60, 226)">
+            <path d="M0 -10 Q-8 -10 -8 -2 L-8 4 L-11 7 L11 7 L8 4 L8 -2 Q8 -10 0 -10 Z" fill="none" stroke="#ff6500" stroke-width="1.5" stroke-linejoin="round">
+              <animateTransform attributeName="transform" type="rotate" values="0;15;-15;0;0" keyTimes="0;0.15;0.3;0.45;1" dur="3s" repeatCount="indefinite"/>
+            </path>
+            <circle cx="0" cy="11" r="2" fill="#ff6500"/>
+            <path d="M-3 -13 Q0 -16 3 -13" stroke="#ff6500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="step-text">
+        <span class="section-tag">Étape 02</span>
+        <h2>Ajouter l'événement à votre calendrier</h2>
+        <p>Cliquez sur ce bouton pour ajouter l'événement à votre calendrier et créer un rappel automatique pour le jour J.</p>
+        <a href="#" id="calendar-btn" class="cta">Je mets un rappel sur mon agenda</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="logo">AI Studio Experience™</div>
+    <p>Atelier live — Dim. 28 juin 2026 · 20h · En ligne · Gratuit</p>
+    <p style="margin-top:12px;font-size:0.75rem;">© 2026 — Tous droits réservés</p>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ===== Calendar event auto-download (.ics) =====
+  // June 28, 2026 at 20:00 Paris time (CEST/UTC+2) = 18:00 UTC
+  function buildIcs() {
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//AI Studio Experience//FR',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:ai-studio-experience-2026-06-28@aistudioexperience.live',
+      'DTSTAMP:20260101T000000Z',
+      'DTSTART:20260628T180000Z',
+      'DTEND:20260628T200000Z',
+      'SUMMARY:AI Studio Experience™ — Live',
+      'DESCRIPTION:2 heures pour comprendre comment lancer votre Studio IA créatif solo et dépasser les 10 000€ par mois.\\n\\nLe lien de connexion sera envoyé dans le groupe WhatsApp et par email.',
+      'LOCATION:En ligne',
+      'STATUS:CONFIRMED',
+      'BEGIN:VALARM',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:AI Studio Experience commence dans 1h',
+      'TRIGGER:-PT1H',
+      'END:VALARM',
+      'BEGIN:VALARM',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:AI Studio Experience demain',
+      'TRIGGER:-P1D',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+  }
+
+  function downloadIcs(e) {
+    if (e) e.preventDefault();
+    const blob = new Blob([buildIcs()], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ai-studio-experience-28-juin-2026.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 200);
+  }
+
+  const calBtn = document.getElementById('calendar-btn');
+  if (calBtn) calBtn.addEventListener('click', downloadIcs);
+</script>
+
+</div>
+<!-- /AI Studio Experience — Confirmation -->

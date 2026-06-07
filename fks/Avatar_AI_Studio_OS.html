@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Client — AI Studio OS</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --text: #1c1917;
+    --text-soft: #57534e;
+    --text-muted: #78716c;
+    --border: #e7e5e4;
+    --border-soft: #f5f5f4;
+    --accent: #0f172a;
+    --accent-soft: #334155;
+    --alert: #b91c1c;
+    --alert-bg: #fef2f2;
+    --success: #15803d;
+    --success-bg: #f0fdf4;
+    --highlight: #f59e0b;
+    --highlight-bg: #fffbeb;
+    --quote-bg: #f5f5f4;
+    --quote-border: #d6d3d1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Sidebar navigation */
+  nav.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 24px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  nav.sidebar h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0 0 16px 0;
+  }
+
+  nav.sidebar ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: section;
+  }
+
+  nav.sidebar ol li {
+    counter-increment: section;
+    margin: 0;
+  }
+
+  nav.sidebar ol li a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-soft);
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    line-height: 1.4;
+  }
+
+  nav.sidebar ol li a::before {
+    content: counter(section) ". ";
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  nav.sidebar ol li a:hover {
+    background: var(--border-soft);
+    color: var(--text);
+  }
+
+  /* Main content */
+  main {
+    padding: 64px 64px 96px;
+    max-width: 920px;
+  }
+
+  header.doc-header {
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--text);
+  }
+
+  header.doc-header .eyebrow {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  header.doc-header h1 {
+    font-size: 42px;
+    line-height: 1.1;
+    margin: 0 0 16px 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  header.doc-header .sources {
+    color: var(--text-soft);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  header.doc-header .sources strong {
+    color: var(--text);
+  }
+
+  /* Synthesis exec callout */
+  .synthesis {
+    background: var(--accent);
+    color: #f8fafc;
+    padding: 32px 36px;
+    border-radius: 12px;
+    margin-bottom: 48px;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .synthesis .label {
+    display: inline-block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .synthesis p {
+    margin: 0;
+  }
+
+  /* Sections */
+  section.chapter {
+    margin-bottom: 64px;
+    scroll-margin-top: 32px;
+  }
+
+  section.chapter h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  section.chapter h2 .num {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  section.chapter .subtitle {
+    color: var(--text-soft);
+    font-size: 15px;
+    margin: 0 0 28px 0;
+    font-style: italic;
+  }
+
+  section.chapter h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 32px 0 14px 0;
+    letter-spacing: -0.005em;
+  }
+
+  section.chapter h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 10px 0;
+    color: var(--text);
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 14.5px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  table th {
+    background: var(--border-soft);
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-soft);
+  }
+
+  table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
+
+  table tr:last-child td {
+    border-bottom: none;
+  }
+
+  table td strong {
+    color: var(--text);
+  }
+
+  /* Verbatim quotes */
+  blockquote, .verbatim {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--quote-border);
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-style: italic;
+    color: var(--text-soft);
+    border-radius: 0 6px 6px 0;
+  }
+
+  blockquote.featured {
+    background: var(--highlight-bg);
+    border-left-color: var(--highlight);
+    font-style: normal;
+    color: var(--text);
+    padding: 20px 24px;
+    font-size: 16px;
+  }
+
+  /* Lists */
+  ul, ol {
+    padding-left: 24px;
+    margin: 12px 0;
+  }
+
+  ul li, ol li {
+    margin-bottom: 8px;
+  }
+
+  ul.verbatim-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  ul.verbatim-list li {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--quote-border);
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    font-style: italic;
+    color: var(--text-soft);
+    border-radius: 0 4px 4px 0;
+    font-size: 14.5px;
+  }
+
+  ul.verbatim-list li::before {
+    content: "“";
+    font-style: normal;
+    font-weight: 600;
+    margin-right: 4px;
+    color: var(--text-muted);
+  }
+
+  ul.verbatim-list li::after {
+    content: "”";
+    font-style: normal;
+    font-weight: 600;
+    margin-left: 4px;
+    color: var(--text-muted);
+  }
+
+  /* Frein / Trigger callouts */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+
+  .callout.frein {
+    border-left: 4px solid var(--alert);
+  }
+
+  .callout.trigger {
+    border-left: 4px solid var(--success);
+  }
+
+  .callout .label {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .callout.frein .label {
+    background: var(--alert-bg);
+    color: var(--alert);
+  }
+
+  .callout.trigger .label {
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  .callout h4 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+  }
+
+  .callout .ranking {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  /* Decode box */
+  .decode {
+    margin-top: 12px;
+    padding: 14px 18px;
+    background: var(--border-soft);
+    border-radius: 6px;
+    font-size: 14.5px;
+  }
+
+  .decode strong {
+    color: var(--accent);
+  }
+
+  /* Sub-profile cards */
+  .subprofile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .subprofile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+  }
+
+  .subprofile h4 {
+    margin-top: 0;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .subprofile .pct {
+    font-size: 13px;
+    background: var(--border-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+
+  .subprofile .sensible {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--highlight-bg);
+    border-left: 3px solid var(--highlight);
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+  }
+
+  .subprofile .sensible strong {
+    color: var(--accent);
+  }
+
+  /* Tools table */
+  .tools-row td:first-child {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--text-soft);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Strong text */
+  strong { color: var(--text); }
+
+  /* Footer */
+  footer.doc-footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    nav.sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    main {
+      padding: 32px 24px 64px;
+    }
+    header.doc-header h1 {
+      font-size: 32px;
+    }
+  }
+
+  /* Print */
+  @media print {
+    nav.sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    main { padding: 0; max-width: 100%; }
+    body { background: white; font-size: 11pt; }
+    .callout, table, .subprofile { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <h2>Sommaire</h2>
+  <ol>
+    <li><a href="#synthese">Synthèse exécutive</a></li>
+    <li><a href="#section-1">Identité démographique</a></li>
+    <li><a href="#section-2">Profil professionnel</a></li>
+    <li><a href="#section-3">Situation financière</a></li>
+    <li><a href="#section-4">Motivations profondes</a></li>
+    <li><a href="#section-5">Pain points</a></li>
+    <li><a href="#section-6">Vision idéale</a></li>
+    <li><a href="#section-7">Freins à l'achat</a></li>
+    <li><a href="#section-8">Déclencheurs d'achat</a></li>
+    <li><a href="#section-9">Outils utilisés</a></li>
+    <li><a href="#section-10">Sous-segments</a></li>
+    <li><a href="#section-11">Angles copywriting</a></li>
+    <li><a href="#section-12">Signaux faibles</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<header class="doc-header">
+  <div class="eyebrow">Document Avatar Client</div>
+  <h1>AI Studio OS</h1>
+  <p class="sources"><strong>Sources :</strong> 16 réponses au questionnaire pédagogique élève + 20 transcriptions d'appels de candidature Fathom (Thomas Assouly × candidats, janvier–février 2026)</p>
+</header>
+
+<div class="synthesis" id="synthese">
+  <span class="label">Synthèse exécutive</span>
+  <p>Créatif indépendant français, <strong>25–35 ans</strong>, qui gagne entre <strong>1500 et 4000 €/mois</strong> en freelance (monteur vidéo, motion designer, DA, graphiste, vidéaste, parfois salarié en transition). Il sent qu'il a atteint un plafond dans son modèle actuel et que <strong>l'IA générative va redistribuer les cartes de son métier dans les 12–24 prochains mois</strong>. Il a peur d'être « en retard sur le train », il bidouille déjà des outils IA en autodidacte (Midjourney, ChatGPT, parfois Wavy/Flux) mais se sent débordé par la vitesse d'évolution et la jungle des outils. Il rêve de <strong>monter son propre studio IA</strong>, d'atteindre 7–10 k+/mois, et de pouvoir bouger librement (Dubaï, Bali, digital nomad). Il suit Nicolas depuis quelques mois à un an, kiffe ses rendus et sa pédagogie, et candidate par opportunisme stratégique — « au pire, je perds 30 min ».</p>
+</div>
+
+<!-- SECTION 1 -->
+<section class="chapter" id="section-1">
+  <h2><span class="num">01</span>Identité démographique</h2>
+
+  <table>
+    <thead>
+      <tr><th>Critère</th><th>Profil dominant</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Âge</strong></td><td>24–35 ans (cœur : 26–32 ans)</td></tr>
+      <tr><td><strong>Sexe</strong></td><td>70 % hommes, 30 % femmes</td></tr>
+      <tr><td><strong>Localisation</strong></td><td>France (Paris/IDF +++, Bordeaux, Marseille, Lyon, Nice/Cannes, Lille, Toulouse) ou expat récent (Dubaï, Bali, Barcelone, Miami, Asie du Sud-Est)</td></tr>
+      <tr><td><strong>Statut</strong></td><td>Freelance / EURL / Micro-entreprise majoritairement. Quelques salariés en transition (data analyst, sales, marketing digital). Quelques jeunes associés en boîte de prod naissante.</td></tr>
+      <tr><td><strong>Situation perso</strong></td><td>Souvent en couple, parfois jeunes parents. Le conjoint est régulièrement consulté pour la décision d'achat (Badr, Jackie, Cédric).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SECTION 2 -->
+<section class="chapter" id="section-2">
+  <h2><span class="num">02</span>Profil professionnel</h2>
+
+  <h3>Métiers cœur (par ordre de fréquence)</h3>
+  <ol>
+    <li><strong>Monteur vidéo / Motion designer</strong> — segment #1 (Allan, Johan, Marc, Fab, Cédric, Ludovic, Gaël + 5 dans CSV)</li>
+    <li><strong>Directeur artistique / Graphiste</strong> (Myriam, Agathe, Hugo/Nectar, Anaïs, Mazarine, + 1 CSV)</li>
+    <li><strong>Vidéaste / Filmmaker / Photographe</strong> (Cédric, Ludovic, Gaël, Allan, Marc, Fab)</li>
+    <li><strong>Concepteur-rédacteur publicitaire</strong> (Paul, en boîte créa avec associés)</li>
+    <li><strong>Salariés en transition</strong> vers entrepreneuriat créatif (Teddy/sales Oracle, Badr/data IT, Anaïs/CM)</li>
+    <li><strong>UGC creator / créateur de contenu marque</strong> (Jackie, Allan)</li>
+    <li><strong>E-commerçant / entrepreneur F&amp;B</strong> (Badr a marque vêtements, 1 e-com CSV, 1 entrepreneur F&amp;B CSV)</li>
+  </ol>
+
+  <h3>Caractéristiques transversales</h3>
+  <ul>
+    <li><strong>Polyvalents par nécessité</strong> : <em>« je porte 12 000 casquettes »</em> (Myriam), <em>« je suis assez polyvalent »</em> (Marc), <em>« je fais un peu de tout »</em> (Anaïs)</li>
+    <li><strong>Souvent solos ou duos</strong> avec un associé / ami complémentaire (Paul, Hugo, Marc, Agathe avec son mari, Victor avec son pote)</li>
+    <li><strong>Souvent autodidactes</strong> : <em>« j'ai tout appris tout seul »</em> (Marc, Allan, Cédric, Fab)</li>
+    <li><strong>Clients en B2B</strong> : restaurants, hôtels, agences immo, PME, parfois grands comptes (Decathlon, KFC, Suez, Enedis, L'Oréal)</li>
+  </ul>
+</section>
+
+<!-- SECTION 3 -->
+<section class="chapter" id="section-3">
+  <h2><span class="num">03</span>Situation financière</h2>
+
+  <table>
+    <thead>
+      <tr><th>Tranche de revenus actuels</th><th>% du sample CSV</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Moins de 1500 €/mois</td><td>Rare, mais quelques cas (Jackie 1000 €, Marc précaire)</td></tr>
+      <tr><td><strong>1500–3000 €/mois</strong></td><td><strong>~50 % (8/16) — le cœur de cible</strong></td></tr>
+      <tr><td><strong>3000–4000 €/mois</strong></td><td><strong>~25 % (4/16)</strong></td></tr>
+      <tr><td>4000–5000 €/mois</td><td>~6 % (1/16)</td></tr>
+      <tr><td>Plus de 5000 €/mois</td><td>~19 % (3/16) — souvent entrepreneurs déjà installés</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Signaux financiers récurrents</h3>
+  <ul>
+    <li><strong>Trésorerie tendue</strong> : <em>« je repars à zéro chaque année »</em> (Cédric), <em>« j'ai 2000 € d'éco »</em> (Marc), <em>« financièrement c'est short »</em> (Paul), <em>« je peux pas sortir cash »</em> (Badr), <em>« je paye les billets d'avion de mon pote »</em> (Allan)</li>
+    <li><strong>Sentiment de plafond</strong> : <em>« j'ai atteint un palier »</em> (Allan), <em>« je stagne à 200 K »</em> (Ludovic), <em>« j'arrive à un plafond verre »</em> (Myriam), <em>« il y a un plafond, c'est un taux horaire »</em> (Allan)</li>
+    <li><strong>Peu d'épargne</strong> pour investir 3000 € d'un coup, mais charges variables maîtrisées.</li>
+  </ul>
+</section>
+
+<!-- SECTION 4 -->
+<section class="chapter" id="section-4">
+  <h2><span class="num">04</span>Motivations profondes</h2>
+  <p class="subtitle">Les 4 grands moteurs émotionnels, par ordre de poids dans le corpus.</p>
+
+  <h3>1. La peur de rater le train (urgence)</h3>
+  <ul class="verbatim-list">
+    <li>J'ai peur d'être en retard sur mes concurrents (3 CSV)</li>
+    <li>Il faut prendre le wagon avant qu'il passe</li>
+    <li>L'IA va tout bouleverser, je ne veux pas rater ce virage (Johan, Ludovic, Myriam, Gaël)</li>
+    <li>Je vais changer de métier dans pas longtemps si je me mets pas dans la course (Myriam)</li>
+    <li>Je suis larguée, ça va trop vite (Myriam, Agathe)</li>
+    <li>Soit tu montes dans le train au bon moment, soit non (Agathe)</li>
+  </ul>
+
+  <h3>2. Le rêve du studio IA + l'avantage concurrentiel</h3>
+  <ul class="verbatim-list">
+    <li>Je veux me reconvertir et monter mon propre studio IA — 10/16 CSV</li>
+    <li>Je veux avoir un avantage concurrentiel par rapport aux autres (4 CSV)</li>
+    <li>Je veux pouvoir facturer davantage dans mon activité actuelle (2 CSV)</li>
+    <li>Step up mon niveau (Fab)</li>
+  </ul>
+
+  <h3>3. Liberté géographique, temporelle, financière</h3>
+  <ul class="verbatim-list">
+    <li>Liberté financière et géographique (CSV)</li>
+    <li>Je veux pouvoir voyager où je veux en télétravail (CSV)</li>
+    <li>Devenir digital nomad (CSV)</li>
+    <li>M'expatrier en Asie du Sud (CSV)</li>
+    <li>Quitter mon CDI pour me lancer pleinement (CSV)</li>
+    <li>Sortir de la prison France (Myriam, Cédric)</li>
+    <li>Plus dépendre d'un patron (CSV)</li>
+  </ul>
+
+  <h3>4. Retrouver le plaisir créatif (segment senior)</h3>
+  <ul class="verbatim-list">
+    <li>J'ai envie de retrouver l'ambition et la créativité (CSV graphiste)</li>
+    <li>Kiffer ma vie de freelance et plus la subir (Myriam)</li>
+    <li>Retrouver l'excitation créative au quotidien (CSV)</li>
+    <li>Être une DA augmentée (Myriam) — l'IA comme prolongement créatif, pas remplacement</li>
+  </ul>
+</section>
+
+<!-- SECTION 5 -->
+<section class="chapter" id="section-5">
+  <h2><span class="num">05</span>Pain points / difficultés actuelles</h2>
+
+  <h3>Top 5 frustrations IA récurrentes</h3>
+  <table>
+    <thead>
+      <tr><th style="width: 40px;">#</th><th>Frustration</th><th>Verbatims</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Génère pas ce qu'il a en tête</strong></td>
+        <td><em>« Je n'arrive pas à générer ce que j'ai dans la tête »</em> (5 CSV), <em>« je n'arrive jamais à sortir quelque chose qui me plaît »</em> (Victor)</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Perdu dans la jungle des outils</strong></td>
+        <td><em>« Je ne comprends pas quels outils utiliser »</em> (3 CSV), <em>« je suis perdu, je ne sais pas qui appartient à quoi »</em> (Marc), <em>« trop dispersé, je ne sais pas quelle direction prendre »</em> (CSV)</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Trop lent à produire</strong></td>
+        <td><em>« Je mets trop de temps à générer des images »</em> (3 CSV)</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Cohérence avatar / scène</strong></td>
+        <td><em>« Cohérence de l'avatar et de la scène d'une vidéo à l'autre, manque de réalisme — on comprend que c'est de l'IA trop facilement »</em> (CSV entrepreneur 5k+)</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td><strong>Manque de structure / workflow</strong></td>
+        <td><em>« Avoir la bonne caisse à outils IA, apprendre à faire des workflows complets »</em> (CSV), <em>« un cadre et des process clairs »</em> (4 CSV)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Frustrations business / posture</h3>
+  <ul>
+    <li><strong>Manque de clients</strong> : <em>« je manque encore de clients »</em> (Fab), <em>« je n'arrive pas à démarcher »</em> (Paul, Hugo)</li>
+    <li><strong>Mal à se vendre</strong> : <em>« je n'ai jamais réussi à me dire 'je vaux ça', syndrome de l'imposteur »</em> (Marc), <em>« bien se vendre c'est compliqué pour moi »</em> (Jackie), <em>« les créatifs sont nuls en business »</em> (Myriam)</li>
+    <li><strong>Sous-payé / dépendant d'un seul client</strong> : <em>« je suis un salarié déguisé, taux horaire »</em> (Allan), <em>« agences qui vendent à 1 € la vidéo UGC IA »</em> (Allan)</li>
+    <li><strong>Burn-out créatif</strong> : <em>« je suis rincée à la fin du mois »</em> (Myriam), <em>« je bossais 60 à 100 h/semaine pour rien »</em> (Ludovic)</li>
+    <li><strong>Solitude du freelance</strong> : <em>« créer tout seul dans ta bulle, tu te sens seul »</em> (Myriam), <em>« besoin du ping-pong créatif »</em></li>
+  </ul>
+</section>
+
+<!-- SECTION 6 -->
+<section class="chapter" id="section-6">
+  <h2><span class="num">06</span>Vision idéale auto-projetée</h2>
+
+  <h3>À 6 mois (verbatims directs CSV)</h3>
+  <ul class="verbatim-list">
+    <li>Je signe mes premiers clients en tant que DA spécialisé IA</li>
+    <li>Je suis capable de générer des visuels cohérents en 3 heures</li>
+    <li>J'ai mes premiers clients en plus de mon activité de filmmaker</li>
+    <li>Je maîtrise plus ou moins la génération d'images, je commence à avoir des demandes de vidéo full IA</li>
+    <li>Premier client signé grâce à l'IA et début de carnet d'adresses</li>
+    <li>Mon studio IA génère 3000 € par mois</li>
+  </ul>
+
+  <h3>À 2 ans (verbatims directs CSV)</h3>
+  <ul class="verbatim-list">
+    <li>J'ai triplé mes revenus grâce à l'IA et je suis digital nomad</li>
+    <li>Je suis la référence IA générative à la Réunion / dans mon domaine</li>
+    <li>Je gagne en moyenne 7000 € par mois</li>
+    <li>Je génère plus de 10 000 € par mois, mon studio travaille avec des leaders de leur marché</li>
+    <li>J'ai pu m'expatrier en Asie du Sud / je suis libre géographiquement</li>
+    <li>Je peux déléguer des projets à mon réseau, je n'ai plus besoin de prospecter</li>
+    <li>Je remplace mes prestataires (media buyer, agence, monteurs) par l'IA + des gens qui savent la piloter</li>
+  </ul>
+</section>
+
+<!-- SECTION 7 -->
+<section class="chapter" id="section-7">
+  <h2><span class="num">07</span>Freins à l'inscription</h2>
+  <p class="subtitle">Par ordre de poids dans le corpus — critique pour la copy.</p>
+
+  <div class="callout frein">
+    <span class="label">Frein #1 — Critique</span>
+    <h4>Le prix (3000 €)</h4>
+    <p><em>Le plus gros frein, mentionné dans quasi tous les calls et 5 CSV.</em></p>
+    <ul class="verbatim-list">
+      <li>Le prix élevé (CSV)</li>
+      <li>Je m'attendais à moins de 2000 € (Cédric)</li>
+      <li>1800 € c'est sûr que c'est pas pour moi (Paul)</li>
+      <li>Je peux mettre 300 €, max (Badr)</li>
+      <li>Là tout de suite, c'est pas du tout possible (Badr)</li>
+      <li>C'est quand même une somme importante, ça représente pas mal de ce que j'ai de côté (Jackie)</li>
+      <li>Manque d'argent surtout (CSV)</li>
+    </ul>
+    <div class="decode">
+      <strong>Décodage :</strong> Le prix est rarement perçu comme excessif en valeur (plusieurs disent <em>« je pensais que ce serait plus cher »</em> — Teddy, <em>« c'est le prix du marché »</em> — Johan). Le vrai blocage = <strong>liquidité immédiate</strong>. D'où les demandes systématiques : « Est-ce qu'on peut payer en plusieurs fois ? » / « Est-ce qu'on peut étaler ? » / « Est-ce que je peux commencer un mois plus tard ? ».
+    </div>
+  </div>
+
+  <div class="callout frein">
+    <span class="label">Frein #2</span>
+    <h4>La peur de l'arnaque</h4>
+    <ul class="verbatim-list">
+      <li>La peur que ce soit une arnaque (3 CSV)</li>
+      <li>Les accompagnements qui garantissent des clients mais c'est pas vraiment des garanties (Johan)</li>
+      <li>Crainte que ce soit trop théorique ou pas assez concret (CSV)</li>
+      <li>J'ai fait une formation IA avec un mec qui voulait pas m'apprendre (Agathe — son expérience cuisante précédente)</li>
+    </ul>
+  </div>
+
+  <div class="callout frein">
+    <span class="label">Frein #3</span>
+    <h4>La peur de ne pas être à la hauteur</h4>
+    <ul class="verbatim-list">
+      <li>Peur de ne pas être capable d'être assez bon pour livrer des résultats à des clients (CSV)</li>
+      <li>Peur de ne pas s'investir à 100 % (CSV)</li>
+      <li>Crainte de pas avoir les compétences (récurrent dans les calls)</li>
+    </ul>
+  </div>
+
+  <div class="callout frein">
+    <span class="label">Frein #4</span>
+    <h4>Le manque de temps</h4>
+    <ul class="verbatim-list">
+      <li>Le manque de temps (4 CSV)</li>
+      <li>Manque de temps dû à mes différentes activités (CSV)</li>
+      <li>Peur de pas pouvoir m'investir comme il faut (récurrent)</li>
+    </ul>
+  </div>
+
+  <div class="callout frein">
+    <span class="label">Frein #5</span>
+    <h4>« Je pourrais apprendre seul / gratuitement »</h4>
+    <ul class="verbatim-list">
+      <li>Crainte de pouvoir accéder à des formations similaires gratuitement (CSV)</li>
+      <li>Pourquoi pas me former tout seul via les workflows que Nicolas partage déjà ? (Johan)</li>
+      <li>Je regarde déjà plein de tutos YouTube (Marc, Fab, Cédric)</li>
+    </ul>
+  </div>
+
+  <h3>Autres freins (secondaires)</h3>
+  <ul>
+    <li><strong>Peur du format scolaire</strong> : <em>« peur de reprendre un format études »</em> (CSV)</li>
+    <li><strong>Décision conjugale</strong> : <em>« il faut que j'en discute avec Madame »</em> (Badr), <em>« j'en parle à mon copain »</em> (Jackie)</li>
+    <li><strong>Investir dans le flou</strong> : <em>« je sais pas dans quoi je mets les pieds »</em> (Myriam, Agathe)</li>
+    <li><strong>Peur de la rentabilité</strong> : <em>« peur que ce ne soit pas rentable »</em> (CSV)</li>
+    <li><strong>Timing perso</strong> : projets en cours, déménagement, naissance d'enfant, etc.</li>
+  </ul>
+</section>
+
+<!-- SECTION 8 -->
+<section class="chapter" id="section-8">
+  <h2><span class="num">08</span>Déclencheurs d'achat</h2>
+  <p class="subtitle">Ce qui les convainc — critique pour la copy.</p>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #1 — Dominant</span>
+    <h4>Nicolas, sa personal brand, ses rendus</h4>
+    <p><em>Le déclencheur ultra-dominant, présent dans quasi tous les calls.</em></p>
+    <ul class="verbatim-list">
+      <li>Je le suis depuis longtemps, j'ai vu son évolution vers l'IA, ça m'a inspiré confiance (Ludovic, Cédric, Marc, Allan, Jackie, Johan, Mazarine)</li>
+      <li>La qualité des visuels mis en avant sur vos réseaux (CSV)</li>
+      <li>Les rendus IA qu'il partage (CSV)</li>
+      <li>Ses succès commerciaux (CSV)</li>
+      <li>Sa DA, son contenu m'a attiré (Marie, Mazarine)</li>
+      <li>Le fait qu'il ait développé son personal branding via un avatar AI qui lui ressemble (CSV — entrepreneur 5k+)</li>
+      <li>Le sérieux du compte Instagram (CSV)</li>
+      <li>C'est le premier francophone IA sur lequel je suis tombée (Mazarine)</li>
+      <li>Mon compagnon suit Nicolas depuis longtemps (CSV graphiste)</li>
+    </ul>
+  </div>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #2</span>
+    <h4>La promesse d'apport d'affaires</h4>
+    <ul class="verbatim-list">
+      <li>Vous allez nous apporter des clients (CSV)</li>
+      <li>La possibilité de démarrer rapidement en couvrant l'accompagnement par des prestations (CSV)</li>
+      <li>Le potentiel de pouvoir travailler sur mes premiers projets clients en sous-traitance (CSV)</li>
+      <li>Je vous paye 1000 € et vous me faites rentrer des projets sur lesquels je récupère de l'argent (Paul)</li>
+    </ul>
+  </div>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #3</span>
+    <h4>Le côté humain / communautaire</h4>
+    <ul class="verbatim-list">
+      <li>La proximité et le côté humain/communautaire, c'est pas juste une série de vidéos (CSV)</li>
+      <li>Le call, l'accompagnement (CSV)</li>
+      <li>Un réseau de créatifs comme moi (CSV)</li>
+      <li>Du coaching par un expert — 6 CSV, l'option la plus demandée</li>
+      <li>On peut s'aider entre nous, ping-pong créatif (Myriam, Agathe)</li>
+    </ul>
+  </div>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #4</span>
+    <h4>Le cadre / la structure</h4>
+    <ul class="verbatim-list">
+      <li>Un cadre et des process clairs — 5 CSV, le 2e besoin le plus exprimé</li>
+      <li>Quelqu'un pour m'accompagner pour savoir si j'avance dans la bonne direction (CSV)</li>
+      <li>Avancer vite et de manière qualitative (CSV)</li>
+      <li>Mieux nous organiser et apprendre (Victor)</li>
+      <li>Prendre un raccourci pour aller plus vite (Ludovic)</li>
+    </ul>
+  </div>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #5</span>
+    <h4>La légitimité de Thomas (le closer)</h4>
+    <ul class="verbatim-list">
+      <li>On voit que tu maîtrises le sujet (Badr)</li>
+      <li>Tu parles clairement mon langage (Teddy)</li>
+      <li>Tu as l'air de maîtriser ton karaté (Marc)</li>
+      <li>Très carré, très clair (Cédric)</li>
+      <li>Le fait que tu sois associé à un sales d'Oracle, ça m'a convaincu (Teddy)</li>
+    </ul>
+  </div>
+
+  <div class="callout trigger">
+    <span class="label">Déclencheur #6</span>
+    <h4>Le fit vision long terme</h4>
+    <ul class="verbatim-list">
+      <li>L'écosystème vision long terme, alumni, mise en relation continue</li>
+      <li>L'ambition de monter un vrai studio, pas juste vendre des formations</li>
+      <li>Vous, vous grossissez, nous on grossit avec vous (Victor)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SECTION 9 -->
+<section class="chapter" id="section-9">
+  <h2><span class="num">09</span>Outils IA déjà utilisés</h2>
+  <p class="subtitle">État des lieux de la maturité du prospect.</p>
+
+  <table>
+    <thead>
+      <tr><th>Niveau d'usage</th><th>Outils mentionnés</th></tr>
+    </thead>
+    <tbody>
+      <tr class="tools-row"><td>Universel</td><td>ChatGPT, Gemini</td></tr>
+      <tr class="tools-row"><td>Très répandu</td><td>Midjourney, Nano Banana</td></tr>
+      <tr class="tools-row"><td>Répandu</td><td>Flux / Xfield, Runway, Kling, Sora 2</td></tr>
+      <tr class="tools-row"><td>Mentionné par les avancés</td><td>Wavy, ComfyUI (système nodal), Topaz, Magnific, Veo</td></tr>
+      <tr class="tools-row"><td>Méta-tools</td><td>Artlist, Mammouth AI</td></tr>
+      <tr class="tools-row"><td>Mentions tech</td><td>Claude Code, V0, no-code</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote class="featured">
+    <strong>Profil typique d'usage actuel :</strong> « J'ai un abonnement Midjourney, je teste Flux, j'ai cramé du crédit Wavy, mais je n'ai pas de workflow clair. »
+  </blockquote>
+
+  <p><strong>Niveau auto-évalué :</strong> majoritairement <em>« je débute »</em>, <em>« je bidouille »</em>, <em>« je teste en autodidacte »</em>. Quelques rares profils confirmés.</p>
+</section>
+
+<!-- SECTION 10 -->
+<section class="chapter" id="section-10">
+  <h2><span class="num">10</span>Sous-segments (4 micro-profils)</h2>
+
+  <div class="subprofile-grid">
+
+    <div class="subprofile">
+      <h4>A — « Le monteur vidéo qui sent le sol bouger » <span class="pct">~40 %</span></h4>
+      <ul>
+        <li>25–32 ans, 1500–4000 €/mois, 1–3 ans d'activité freelance</li>
+        <li>Voit que l'UGC IA / la vidéo IA va manger son métier</li>
+        <li>Veut « step up » pour ne pas être obsolète</li>
+      </ul>
+      <div class="sensible"><strong>Sensible à :</strong> peur du déclassement professionnel.<br><em>Exemples : Allan, Johan, Marc, Fab, Cédric</em></div>
+    </div>
+
+    <div class="subprofile">
+      <h4>B — « Le DA / graphiste senior qui veut se réinventer » <span class="pct">~25 %</span></h4>
+      <ul>
+        <li>28–38 ans, 3000–10000 €/mois (déjà installé), 5+ ans d'expérience</li>
+        <li>Plafond ressenti, fatigue, besoin de scaler sans recruter</li>
+        <li>Veut être « DA augmenté » — l'IA comme prolongement créatif</li>
+      </ul>
+      <div class="sensible"><strong>Sensible à :</strong> retrouver le plaisir créatif + scaler.<br><em>Exemples : Myriam, Agathe, Hugo (Nectar Studio), Mazarine</em></div>
+    </div>
+
+    <div class="subprofile">
+      <h4>C — « Le salarié qui veut sauter mais a peur » <span class="pct">~20 %</span></h4>
+      <ul>
+        <li>24–30 ans, salaire 2400–4000 €/mois en CDI</li>
+        <li>Veut quitter le salariat avec un parachute</li>
+        <li>Side project en cours (marque, photo, contenu)</li>
+      </ul>
+      <div class="sensible"><strong>Sensible à :</strong> sécurité du pivot, premier revenu IA avant de claquer la porte.<br><em>Exemples : Teddy, Badr, en partie Allan</em></div>
+    </div>
+
+    <div class="subprofile">
+      <h4>D — « L'entrepreneur curieux qui veut intégrer l'IA dans son business » <span class="pct">~15 %</span></h4>
+      <ul>
+        <li>28–40 ans, 5000 €+/mois, agence / e-com / F&amp;B / branding installés</li>
+        <li>Cherche l'avantage concurrentiel pour son business actuel</li>
+        <li>Capable de payer, moins sensible au prix</li>
+      </ul>
+      <div class="sensible"><strong>Sensible à :</strong> ROI rapide, intégration dans workflow existant, niveau premium.<br><em>Exemples : entrepreneur F&amp;B/branding CSV, entrepreneur agence marketing CSV</em></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 11 -->
+<section class="chapter" id="section-11">
+  <h2><span class="num">11</span>Angles d'attaque copywriting</h2>
+  <p class="subtitle">Synthèse opérationnelle pour passer du brief à la copy.</p>
+
+  <h3>Big idea / promesse maîtresse</h3>
+  <blockquote class="featured">
+    Devenir le studio IA que les marques cherchent — avant que ton métier actuel disparaisse.
+  </blockquote>
+
+  <h3>Hooks puissants à tester</h3>
+  <ol>
+    <li>Tu fais du montage / motion / DA depuis 2–5 ans, tu sens que ton métier va changer dans les 12 mois et tu ne sais pas par où commencer ?</li>
+    <li>Tu bidouilles Midjourney et Wavy depuis 6 mois, tu n'arrives toujours pas à générer ce que tu as dans la tête, et chaque tuto YouTube te perd un peu plus ?</li>
+    <li>Combien de fois t'es-tu dit que l'IA allait redéfinir ton métier et que tu devais « absolument t'y mettre » — sans jamais sauter le pas ?</li>
+    <li>Pendant que tu hésites, des freelances qui maîtrisent l'IA prennent les clients que tu aurais dû avoir.</li>
+  </ol>
+
+  <h3>Objections à traiter en priorité</h3>
+  <ol>
+    <li><strong>Prix 3000 €</strong> : montrer le ROI (1 client à 5K rentabilise), proposer un paiement échelonné dès la promesse principale.</li>
+    <li><strong>« J'apprends seul »</strong> : démontrer le gap entre tutos gratuits (DA absente, workflows incomplets) vs cadre + clients livrés.</li>
+    <li><strong>« Arnaque »</strong> : preuve sociale (membres alumni, projets livrés, témoignages), transparence sur le modèle économique.</li>
+    <li><strong>« Pas le temps »</strong> : montrer la flexibilité, le rythme adapté, l'autonomie de la plateforme.</li>
+  </ol>
+
+  <h3>Preuves à mobiliser</h3>
+  <ul>
+    <li>Évolution publique de Nicolas (vidéaste → IA reference) = preuve par la légitimité.</li>
+    <li>Rendus visuels concrets (pub Quartier, FPV, etc.) = preuve par l'œuvre.</li>
+    <li>Membres déjà signés (~10/mois) = preuve sociale.</li>
+    <li>Apport d'affaires garanti = preuve par le résultat business.</li>
+  </ul>
+
+  <h3>Tonalité</h3>
+  <ul>
+    <li>Direct, pas de bullshit (« on ne vend pas du rêve, on partage notre carnet de commandes »).</li>
+    <li>Respect du sentiment d'urgence du prospect (sans le forcer).</li>
+    <li>Insider / pair, pas « guru-formateur » (les avatars sont allergiques au format infoproduit).</li>
+    <li>Mise en avant du <strong>modèle économique transparent</strong> : <em>« On vous prend parce qu'on a besoin de vous pour délivrer les contrats qu'on signe »</em> — c'est ce qui rassure le plus.</li>
+  </ul>
+</section>
+
+<!-- SECTION 12 -->
+<section class="chapter" id="section-12">
+  <h2><span class="num">12</span>Signaux faibles &amp; points d'attention</h2>
+
+  <ul>
+    <li><strong>Concurrence existante</strong> : plusieurs candidats sont déjà bookés ailleurs (Anthony Jonas mentionné par Johan, Yonak AI dans CSV). Différencier sur le combo « formation + apport d'affaires + communauté FR ».</li>
+    <li><strong>La fenêtre d'opportunité est explicitement perçue</strong> : « il faut prendre le wagon maintenant » est un thème universel — la copy peut surfer dessus, mais sans tomber dans la pression artificielle (le public est trop fin).</li>
+    <li><strong>Forte demande de transparence</strong> sur le modèle économique : <em>« comment vous gagnez de l'argent ? »</em> revient souvent. La copy doit assumer le modèle (3000 € + % apport d'affaires) plutôt que de le cacher.</li>
+    <li><strong>Le mot « agence » / « studio » est central</strong> dans l'imaginaire — pas « formation », pas « coaching », pas « mentorat » seul. C'est l'image du <strong>studio IA</strong> qui fait rêver.</li>
+    <li><strong>Le profil féminin (Myriam, Agathe, Mazarine, Jackie, Marie, Anaïs) a une vibe différente</strong> : plus dans l'esthétisme, le craft, le « DA augmenté », moins dans le « make money fast ». Possibilité de produire une variante de la copy pour cette audience si tu vises spécifiquement.</li>
+  </ul>
+</section>
+
+<footer class="doc-footer">
+  Document généré à partir de l'analyse croisée de 16 réponses questionnaire + 20 transcriptions d'appels (Thomas Assouly, janvier–février 2026).
+</footer>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Studio Experience™ — Atelier live dimanche 28 juin 2026 à 20h</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #000000;
+    --text: #ffffff;
+    --accent: #ff6500;
+    --muted: rgba(255, 255, 255, 0.65);
+    --line: rgba(255, 255, 255, 0.12);
+    --card: rgba(255, 255, 255, 0.04);
+    --radius: 18px;
+    --max: 1200px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== GLOBAL TYPOGRAPHY ========== */
+  h1, h2, h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  h1 { font-size: clamp(1.8rem, 4vw, 3rem); }
+  h2 {
+    font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+    background: linear-gradient(135deg, #ffffff 0%, #ffd2b0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
+  p  { font-size: clamp(0.9rem, 1vw, 1rem); color: var(--muted); }
+
+  .accent { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+  /* ========== LAYOUT ========== */
+  .container {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  section {
+    padding: 120px 0;
+    position: relative;
+  }
+
+  /* ========== CTA BUTTONS ========== */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 18px 32px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(255, 101, 0, 0.4);
+  }
+  .cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(255, 101, 0, 0.45);
+  }
+  .cta::after {
+    content: '→';
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  .cta:hover::after { transform: translateX(4px); }
+
+  /* ========== HERO ========== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 100px 0;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.72;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.5) 85%),
+      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.75) 100%);
+    pointer-events: none;
+  }
+  .hero-accent-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255, 101, 0, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255, 101, 0, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 24px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    margin-bottom: 32px;
+  }
+  .eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #fff 60%, rgba(255,255,255,0.5) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero h1 .tm {
+    font-size: 0.4em;
+    vertical-align: super;
+    color: var(--accent);
+    -webkit-text-fill-color: var(--accent);
+  }
+  .hero .lead {
+    font-size: clamp(1.8rem, 3.6vw, 3rem);
+    color: var(--text);
+    max-width: 900px;
+    margin: 16px auto 24px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .hero .sub-lead {
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 56px;
+    font-weight: 500;
+  }
+  .hero-content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .hero h1 {
+    line-height: 1;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  /* ========== SECTION HEADERS ========== */
+  .section-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  /* ========== SECTION 2 : DESCRIPTION (2 COLS) ========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .two-col .text-block h2 { margin-bottom: 28px; }
+  .two-col .text-block p { margin-bottom: 18px; }
+  .two-col .text-block p.highlight {
+    color: var(--text);
+    font-weight: 500;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin: 24px 0;
+  }
+  .image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(255,101,0,0.1), rgba(0,0,0,0.6)),
+      radial-gradient(circle at 30% 30%, rgba(255,101,0,0.15), transparent 50%),
+      #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .image-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px dashed rgba(255,255,255,0.1);
+    border-radius: calc(var(--radius) - 8px);
+  }
+
+  /* ========== SECTION 2 : DESCRIPTION CENTERED ========== */
+  .description-centered {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .description-centered h2 { margin-bottom: 36px; }
+  .description-centered p { margin-bottom: 20px; }
+  .description-centered .highlight {
+    color: var(--text);
+    font-weight: 500;
+    border-left: none;
+    padding: 24px 0;
+    margin: 32px auto;
+    max-width: 720px;
+    position: relative;
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+  }
+  .description-centered .highlight::before,
+  .description-centered .highlight::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: var(--accent);
+    margin: 16px auto;
+  }
+  .description-centered .highlight::before { margin-top: 0; }
+  .description-centered .highlight::after { margin-bottom: 0; }
+
+  /* ========== SECTION 3 : EXPERIENCE ========== */
+  .experience { text-align: center; }
+  .experience .container > * { margin-left: auto; margin-right: auto; }
+  .experience h2 { max-width: 900px; margin-bottom: 28px; }
+  .experience p  { max-width: 720px; margin-bottom: 18px; }
+  .experience .experience-image {
+    width: 100%;
+    max-width: 1100px;
+    margin: 56px auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: #0a0a0a;
+    line-height: 0;
+  }
+  .experience .experience-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ========== SECTION 4 : PHASES ========== */
+  .phases { text-align: center; }
+  .phases h2 { max-width: 900px; margin: 0 auto 80px; }
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 64px;
+  }
+  .phase-card {
+    text-align: center;
+    padding: 40px 24px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--card);
+    transition: transform 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+  }
+  .phase-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    background: rgba(255, 101, 0, 0.04);
+  }
+  .phase-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 101, 0, 0.08);
+    border: 1px solid rgba(255, 101, 0, 0.3);
+  }
+  .phase-icon svg { width: 40px; height: 40px; }
+  .phase-number {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .phase-card p { color: var(--text); font-weight: 500; }
+
+  /* ========== SECTION 5 : BONUS ========== */
+  .bonus { text-align: center; }
+  .bonus-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 101, 0, 0.3);
+    background:
+      radial-gradient(circle at top, rgba(255,101,0,0.12), transparent 70%),
+      #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+  .bonus-wrap::before {
+    content: 'BONUS EXCLUSIF';
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .bonus h2 { margin: 32px 0 28px; }
+  .bonus-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 520px;
+    height: auto;
+    margin: 0 auto 32px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: #050505;
+    overflow: hidden;
+  }
+  .bonus-includes {
+    text-align: left;
+    margin: 28px auto 40px;
+    max-width: 560px;
+  }
+  .bonus-includes .label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .bonus-includes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .bonus-includes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    font-weight: 500;
+  }
+  .bonus-includes li::before {
+    content: '◉';
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    margin-top: 3px;
+  }
+
+  /* ========== SECTION 6 : PRESENTATION ========== */
+  .presentation .text-block { order: 2; }
+  .presentation .image-col { order: 1; }
+  .presentation p + p { margin-top: 16px; }
+  .presentation .presentation-image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(255,101,0,0.1), rgba(0,0,0,0.6)),
+      radial-gradient(circle at 30% 30%, rgba(255,101,0,0.15), transparent 50%),
+      #0a0a0a;
+    position: relative;
+  }
+  .presentation .presentation-image::before {
+    content: 'Photo · Nico IRL';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .presentation .presentation-image img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ========== SECTION 7 : TESTIMONIALS ========== */
+  .testimonials {
+    text-align: center;
+    overflow: hidden;
+  }
+  .testimonials h2 {
+    margin-bottom: 64px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+  .carousel-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+  }
+  .carousel:hover .carousel-track { animation-play-state: paused; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-50% - 12px)); }
+  }
+  .testimonial {
+    width: 340px;
+    padding: 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--card);
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .testimonial-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,101,0,0.4), rgba(255,101,0,0.1));
+    border: 1px solid var(--line);
+    margin-bottom: 20px;
+  }
+  .testimonial p {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .testimonial .name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .testimonial .role {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .stars {
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+  .testimonial-image {
+    width: 320px;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .testimonial-image .img-wrap {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    position: relative;
+    background:
+      linear-gradient(135deg, rgba(255,101,0,0.12), rgba(0,0,0,0.5)),
+      radial-gradient(circle at 30% 30%, rgba(255,101,0,0.18), transparent 55%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+  .testimonial-image .img-wrap::before {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .testimonial-image .img-wrap img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .testimonial-image .caption {
+    padding: 16px 18px;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    padding: 60px 0 40px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer .logo {
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ========== REVEAL ANIMATIONS ========== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    section { padding: 80px 0; }
+    .two-col { grid-template-columns: 1fr; gap: 40px; }
+    .presentation .text-block { order: 2; }
+    .presentation .image-col { order: 1; }
+    .phases-grid { grid-template-columns: 1fr; }
+    .bonus-wrap { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== 1. HERO ========== -->
+<section class="hero">
+  <div class="hero-bg">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="VIDEO%20-%20HERO.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-accent-glow"></div>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content reveal">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      <span>Atelier live — Dim. 28 juin · 20h</span>
+    </div>
+    <h1>AI Studio<br/>Experience<span class="tm">™</span></h1>
+    <p class="lead">2 heures pour comprendre comment lancer votre Studio IA et dépasser les 10 000€ par mois en tant que créatif freelance.</p>
+    <p class="sub-lead">Découvrez le nouveau modèle recherché par les entreprises.</p>
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je réserve ma place gratuite</a>
+  </div>
+</section>
+
+<!-- ========== 2. DESCRIPTION ========== -->
+<section class="description">
+  <div class="container">
+    <div class="description-centered reveal">
+      <span class="section-tag">Le contexte</span>
+      <h2>Et si il existait un nouveau modèle qui permettait aux créatifs solos de concurrencer les agences de production à gros budget&nbsp;?</h2>
+      <p>L'IA est en train de révolutionner notre manière de consommer mais surtout, notre manière de travailler.</p>
+      <p>Et pendant que certains freelance crient au scandale, un petit groupe de créatif a compris que l'IA n'allait pas tuer leur métier mais le révolutionner.</p>
+      <p class="highlight">Produire en 4 heures une campagne créative à 1000€ qui prend normalement 3 semaines, c'est aujourd'hui possible.</p>
+      <p>Dans ce live, vous allez découvrir comment l'intelligence artificielle peut devenir un avantage concurrentiel et vous faire atteindre la barre des 5 chiffres par mois grâce au nouveau modèle de Studio IA créatif solo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. EXPERIENCE ========== -->
+<section class="experience">
+  <div class="container reveal">
+    <span class="section-tag">L'expérience</span>
+    <h2>AI Studio Experience<span class="accent">™</span> : apprenez en live comment créer votre première campagne créative à 1000€ en moins de 2 heures.</h2>
+    <p>Pendant ce live on va réaliser sous vos yeux et ensemble les workflow pour passer d'une page blanche à une campagne créative à 4 chiffres.</p>
+    <p>À la fin de cette expérience, vous saurez quel outil utiliser dans quel contexte et comment construire un workflow IA pour un rendu hyper réaliste.</p>
+    <div class="experience-image">
+      <img src="PHOTO%20-%20SECTION%20EXPERIENCE.png" alt="AI Studio Experience" />
+    </div>
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je veux assister à l'AI Studio Experience gratuitement</a>
+  </div>
+</section>
+
+<!-- ========== 4. PHASES ========== -->
+<section class="phases">
+  <div class="container">
+    <span class="section-tag reveal">Le programme</span>
+    <h2 class="reveal">Les 3 phases de l'événement <br/>AI Studio Experience<span class="accent">™</span></h2>
+
+    <div class="phases-grid">
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Vague / écraser le marché (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="#ff6500" stroke-width="2.5" stroke-linecap="round">
+              <animate attributeName="d"
+                values="M8 40 Q20 24 32 40 T56 40;
+                        M8 40 Q20 48 32 40 T56 40;
+                        M8 40 Q20 24 32 40 T56 40"
+                dur="3s" repeatCount="indefinite"/>
+            </path>
+            <path stroke="#ff6500" stroke-width="2.5" stroke-linecap="round" opacity="0.5">
+              <animate attributeName="d"
+                values="M8 48 Q20 32 32 48 T56 48;
+                        M8 48 Q20 56 32 48 T56 48;
+                        M8 48 Q20 32 32 48 T56 48"
+                dur="3s" begin="0.4s" repeatCount="indefinite"/>
+            </path>
+            <g transform="translate(48 20)">
+              <circle r="6" stroke="#ff6500" stroke-width="2.5"/>
+              <path d="M0 -6 L0 6 M-6 0 L6 0" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round"/>
+              <animateTransform attributeName="transform" type="translate" values="48 20;48 16;48 20" dur="2s" repeatCount="indefinite"/>
+            </g>
+          </svg>
+        </div>
+        <div class="phase-number">Phase 01</div>
+        <p>La vraie raison pour laquelle les créatifs hybrides vont écraser le marché d'ici les 12 prochains mois.</p>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Canal caché / radar (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pulses propagating outward -->
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="32" cy="32" stroke="#ff6500" stroke-width="2.5" fill="none">
+              <animate attributeName="r" values="4;24;24" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Center dot pulsing -->
+            <circle cx="32" cy="32" r="4" fill="#ff6500">
+              <animate attributeName="r" values="3;5;3" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Crosshairs -->
+            <path d="M32 12 L32 4 M32 60 L32 52 M12 32 L4 32 M60 32 L52 32" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+            <!-- Scanning blip rotating around -->
+            <g style="transform-origin: 32px 32px;">
+              <circle cx="32" cy="14" r="2" fill="#ff6500">
+                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="3s" repeatCount="indefinite"/>
+            </g>
+          </svg>
+        </div>
+        <div class="phase-number">Phase 02</div>
+        <p>Le canal contre-intuitif où trouver des missions créatives à 5 chiffres sans prospecter ni présence sur les réseaux sociaux.</p>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-icon">
+          <!-- SVG : Lecture / Live démo (animé) -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Écran -->
+            <rect x="10" y="14" width="44" height="32" rx="3" stroke="#ff6500" stroke-width="2.5"/>
+            <!-- LED REC qui clignote -->
+            <circle cx="48" cy="20" r="2" fill="#ff6500">
+              <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+              <animate attributeName="r" values="2;2.6;2" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Bouton play qui pulse -->
+            <path d="M28 24 L40 30 L28 36 Z" fill="#ff6500">
+              <animateTransform attributeName="transform" type="scale" values="1;1.15;1" dur="1.6s" repeatCount="indefinite" additive="sum"/>
+              <animate attributeName="opacity" values="0.7;1;0.7" dur="1.6s" repeatCount="indefinite"/>
+            </path>
+            <!-- Base / stand -->
+            <path d="M20 54 L44 54" stroke="#ff6500" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 46 L28 54 M36 46 L36 54" stroke="#ff6500" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+            <!-- Petits signaux de diffusion en bas -->
+            <g stroke="#ff6500" stroke-width="1.5" stroke-linecap="round" fill="none">
+              <path d="M50 50 Q53 53 50 56" opacity="0">
+                <animate attributeName="opacity" values="0;1;0" dur="1.4s" repeatCount="indefinite"/>
+              </path>
+              <path d="M53 48 Q57 53 53 58" opacity="0">
+                <animate attributeName="opacity" values="0;1;0" dur="1.4s" begin="0.3s" repeatCount="indefinite"/>
+              </path>
+            </g>
+          </svg>
+        </div>
+        <div class="phase-number">Phase 03</div>
+        <p>Démonstration live : création d'une campagne créative complète sous vos yeux.</p>
+      </div>
+    </div>
+
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta reveal">Je réserve ma place</a>
+  </div>
+</section>
+
+<!-- ========== 5. BONUS ========== -->
+<section class="bonus">
+  <div class="container">
+    <div class="bonus-wrap reveal">
+      <h2>Pour toutes les personnes inscrites à AI Studio Experience<span class="accent">™</span></h2>
+      <video
+        class="bonus-image"
+        src="VIDEO%20-%20SECTION%20BONUS.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto">
+      </video>
+      <h3>Votre Stack AI Launch.</h3>
+      <div class="bonus-includes">
+        <span class="label">Inclus</span>
+        <ul>
+          <li>3 ressources complètes pour créer votre première micro campagne IA premium (même si vous êtes débutant total).</li>
+          <li>Le workflow exact que j'ai utilisé pour créer une série de visuels facturée 1 400€ pour 4 heures de travail.</li>
+          <li>Un accès anticipé à l'AI Studio Experience et au groupe communautaire.</li>
+        </ul>
+      </div>
+      <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je veux commencer l'expérience maintenant</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6. PRESENTATION ========== -->
+<section class="presentation">
+  <div class="container">
+    <div class="two-col">
+      <div class="image-col reveal">
+        <div class="presentation-image">
+          <img src="PHOTO%20-%20NICO%20IRL.jpg" alt="Nicolas Slowdown" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <div class="text-block reveal">
+        <span class="section-tag">Live animé par Nicolas "Slowdown"</span>
+        <h2>Du "freelance remplaçable" au directeur artistique demandé.</h2>
+        <p>Il y a quelques années, j'étais comme vous : freelance à 60 heures par semaine bloqué à 3 000€ par mois.</p>
+        <p>Je courais après les contrats pour enchaîner des projets moyens.</p>
+        <p>Puis j'ai pris un virage que peu de créatifs ont pris en France : <strong style="color:var(--text)">la direction artistique appliquée à l'IA.</strong></p>
+        <p>J'ai fondé le premier Studio IA francophone qui produit l'impossible pour des marques premium.</p>
+        <p>Le modèle de studio IA à changé ma vie et m'a fait passer de "freelance remplaçable" à "directeur artistique demandé".</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 7. TESTIMONIALS ========== -->
+<section class="testimonials">
+  <div class="container reveal">
+    <span class="section-tag">Témoignage</span>
+    <h2>Ce qu'ils disent du modèle Studio IA créatif solo.</h2>
+  </div>
+
+  <div class="carousel">
+    <div class="carousel-track">
+      <!-- Set 1 : alternance témoignage / image générée -->
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Je viens de signer Arthur 1500€ pour 15 video ads, il a signé le devis hier."</p>
+        <div class="name">Ismaël</div>
+        <div class="role">Vidéaste freelance</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 1">
+          <img src="GEN.%20CLIENT%20-%20FEMME%20PISCINE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Jacky — ancienne DA reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Yes merci, j'ai pu upsell 1400€ fixe mensuel 🤝"</p>
+        <div class="name">Nastasia</div>
+        <div class="role">Freelance créative</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 2">
+          <img src="GEN.%20CLIENT%20-%20GLACE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Anaïs — ancienne vidéaste reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Hello juste pour te tenir au jus, je signe un contrat en agence de publicité qui va me rajouter 2000€ de CA chaque mois en plus 🤩 très contente de ce nouveau step."</p>
+        <div class="name">Mathilde</div>
+        <div class="role">Directrice artistique</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 3">
+          <img src="GEN.%20CLIENT%20-%20P%C3%8ACHE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Thilo — ancien monteur vidéo reconverti en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Là je viens de capter des trucs que tu m'as dit donc j'avance 1000 fois plus vite."</p>
+        <div class="name">Christophe</div>
+        <div class="role">Monteur vidéo</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 4">
+          <img src="GEN.%20CLIENT%20-%20SKI.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Théo — ancien monteur vidéo reconverti en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"J'ai compris pourquoi je stagnais. Le shift mental + les outils m'ont fait passer un cap que je pensais inatteignable."</p>
+        <div class="name">Julien P.</div>
+        <div class="role">Filmmaker</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 5">
+          <img src="GEN.%20CLIENT%20-%20FEMME%20BALLON.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Pauline — ancienne créatrice UGC reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"En tant que graphiste je pensais que l'IA me tuerait. C'est l'inverse : elle multiplie ma valeur sur chaque projet."</p>
+        <div class="name">Camille B.</div>
+        <div class="role">Graphiste</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 6">
+          <img src="GEN.%20CLIENT%20-%20BOX.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Fabien — ancien vidéaste reconverti en Studio IA créatif solo</div>
+      </div>
+
+      <!-- Set 2 (duplicate for infinite loop) -->
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Je viens de signer Arthur 1500€ pour 15 video ads, il a signé le devis hier."</p>
+        <div class="name">Ismaël</div>
+        <div class="role">Vidéaste freelance</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 1">
+          <img src="GEN.%20CLIENT%20-%20FEMME%20PISCINE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Jacky — ancienne DA reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Yes merci, j'ai pu upsell 1400€ fixe mensuel 🤝"</p>
+        <div class="name">Nastasia</div>
+        <div class="role">Freelance créative</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 2">
+          <img src="GEN.%20CLIENT%20-%20GLACE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Anaïs — ancienne vidéaste reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Hello juste pour te tenir au jus, je signe un contrat en agence de publicité qui va me rajouter 2000€ de CA chaque mois en plus 🤩 très contente de ce nouveau step."</p>
+        <div class="name">Mathilde</div>
+        <div class="role">Directrice artistique</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 3">
+          <img src="GEN.%20CLIENT%20-%20P%C3%8ACHE.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Thilo — ancien monteur vidéo reconverti en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Là je viens de capter des trucs que tu m'as dit donc j'avance 1000 fois plus vite."</p>
+        <div class="name">Christophe</div>
+        <div class="role">Monteur vidéo</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 4">
+          <img src="GEN.%20CLIENT%20-%20SKI.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Théo — ancien monteur vidéo reconverti en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"J'ai compris pourquoi je stagnais. Le shift mental + les outils m'ont fait passer un cap que je pensais inatteignable."</p>
+        <div class="name">Julien P.</div>
+        <div class="role">Filmmaker</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 5">
+          <img src="GEN.%20CLIENT%20-%20FEMME%20BALLON.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Pauline — ancienne créatrice UGC reconvertie en Studio IA créatif solo</div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"En tant que graphiste je pensais que l'IA me tuerait. C'est l'inverse : elle multiplie ma valeur sur chaque projet."</p>
+        <div class="name">Camille B.</div>
+        <div class="role">Graphiste</div>
+      </div>
+      <div class="testimonial-image">
+        <div class="img-wrap" data-label="GEN. CLIENT 6">
+          <img src="GEN.%20CLIENT%20-%20BOX.jpeg" alt="Visuel créé par un Studio IA Créatif Solo" onerror="this.style.display='none'" />
+        </div>
+        <div class="caption">Créé par Fabien — ancien vidéaste reconverti en Studio IA créatif solo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="text-align:center; margin-top:64px;">
+    <a href="#" data-ais-popup="popup-c859be5c" class="cta">Je rejoins l'AI Studio Experience</a>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="logo">AI Studio Experience™</div>
+    <p>Atelier live — Dim. 28 juin 2026 · 20h · En ligne · Gratuit</p>
+    <p style="margin-top:12px;font-size:0.75rem;">© 2026 — Tous droits réservés</p>
+  </div>
+</footer>
+
+<script>
+  // Soft reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ===== Force-open Systeme.io popup on CTA click =====
+  // Tries multiple strategies in case Systeme.io's auto-binding doesn't catch our buttons.
+  function openSystemePopup(popupId) {
+    // Strategy 1: Systeme.io's potential JS APIs
+    var apis = [
+      window.systemeIO && window.systemeIO.openPopup,
+      window.SIO && window.SIO.openPopup,
+      window.sysio && window.sysio.openPopup,
+      window.systeme && window.systeme.openPopup
+    ];
+    for (var i = 0; i < apis.length; i++) {
+      if (typeof apis[i] === 'function') {
+        try { apis[i](popupId); return true; } catch(e) {}
+      }
+    }
+
+    // Strategy 2: Find the popup element (in current or parent document) and force-show it
+    var doc = document;
+    var popup = doc.getElementById(popupId);
+    if (!popup) {
+      try { popup = window.parent.document.getElementById(popupId); doc = window.parent.document; } catch(e) {}
+    }
+    if (!popup) {
+      try { popup = window.top.document.getElementById(popupId); doc = window.top.document; } catch(e) {}
+    }
+    if (popup) {
+      // Force-show the popup AND all its ancestors up to <body> — React renders the popup
+      // inside an overlay container that may be hidden. We need to unhide the whole chain.
+      function forceShow(el, displayValue) {
+        el.style.setProperty('display', displayValue, 'important');
+        el.style.setProperty('visibility', 'visible', 'important');
+        el.style.setProperty('opacity', '1', 'important');
+        el.style.setProperty('pointer-events', 'auto', 'important');
+        el.classList.add('show', 'active', 'open', 'visible', 'in', 'is-open');
+        el.removeAttribute('hidden');
+        el.setAttribute('aria-hidden', 'false');
+      }
+      forceShow(popup, 'flex');
+      popup.style.setProperty('z-index', '2147483647', 'important');
+      var chain = [popup];
+      var cur = popup.parentElement;
+      while (cur && cur.tagName !== 'BODY' && cur.id !== 'app' && chain.length < 15) {
+        forceShow(cur, 'flex');
+        chain.push(cur);
+        cur = cur.parentElement;
+      }
+      // React keeps re-rendering and may revert our styles. Watch and re-apply for 8s.
+      var observer = new MutationObserver(function() {
+        chain.forEach(function(el) {
+          var cs = getComputedStyle(el);
+          if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') {
+            forceShow(el, 'flex');
+          }
+        });
+      });
+      chain.forEach(function(el) {
+        observer.observe(el, { attributes: true, attributeFilter: ['style', 'class', 'hidden', 'aria-hidden'] });
+      });
+      setTimeout(function() { observer.disconnect(); }, 8000);
+      doc.dispatchEvent(new CustomEvent('popup:open', { detail: { id: popupId } }));
+      return true;
+    }
+    console.warn('[AIS] Popup not found in DOM:', popupId);
+    return false;
+  }
+
+  // Simulate exit intent (the only trigger Systeme.io listens to besides auto-delay)
+  function simulateExitIntent() {
+    var evt = new MouseEvent('mouseleave', { bubbles: true, cancelable: true, clientY: -50 });
+    document.documentElement.dispatchEvent(evt);
+    document.body.dispatchEvent(evt);
+    var out = new MouseEvent('mouseout', { bubbles: true, cancelable: true, clientY: -50, relatedTarget: null });
+    document.dispatchEvent(out);
+  }
+
+  document.querySelectorAll('[data-ais-popup]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      var popupId = btn.getAttribute('data-ais-popup');
+      // Try exit-intent first (cleanest if Systeme.io accepts it)
+      simulateExitIntent();
+      // Then force-show 50ms later (lets exit-intent fire first, then we cover the gap)
+      setTimeout(function() { openSystemePopup(popupId); }, 50);
+    });
+  });
+</script>
+
+</body>
+</html>
